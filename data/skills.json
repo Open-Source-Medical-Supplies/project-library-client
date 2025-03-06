@@ -1,0 +1,34 @@
+[
+  {
+    "slug": "basic-assembly",
+    "name": "Basic Assembly"
+  },
+  {
+    "slug": "general-sewing",
+    "name": "General Sewing"
+  },
+  {
+    "slug": "glue-tape",
+    "name": "Glue/Tape"
+  },
+  {
+    "slug": "3d-printing",
+    "name": "3D Printing"
+  },
+  {
+    "slug": "laser-cutting",
+    "name": "Laser Cutting"
+  },
+  {
+    "slug": "cnc-machining",
+    "name": "CNC Machining"
+  },
+  {
+    "slug": "basic-electronics",
+    "name": "Basic Electronics"
+  },
+  {
+    "slug": "mold-making",
+    "name": "Mold Making"
+  }
+]

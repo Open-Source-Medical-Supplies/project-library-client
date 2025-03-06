@@ -1,0 +1,43 @@
+.projectContainer {
+  display: flex;
+  flex-direction: column;
+  background-color: #F9FAFB; /* equivalent to Tailwind's bg-gray-50 */
+}
+
+.heroSection {
+  background-color: #ffffff;
+  margin: 0.5rem auto 0 auto; /* mt-2 and centering */
+  width: 75%; /* equivalent to w-3/4 */
+}
+
+.gridContainer {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* two equal columns */
+}
+
+.heroImage {
+  width: 50%; /* equivalent to w-1/2 */
+}
+
+.linkContainer {
+  margin-top: 2.5rem; /* equivalent to mt-10 */
+}
+
+.projectLink {
+  background-color: #9CA3AF; /* equivalent to bg-gray-400 */
+  padding: 1rem; /* equivalent to p-4 */
+  text-decoration: none;
+  color: inherit;
+}
+
+.projectTitle {
+  font-size: 1.5rem; /* approximate value for text-2xl */
+  font-weight: bold;
+  color: #1F2937; /* equivalent to text-gray-800 */
+}
+
+.projectDescription {
+  margin-top: 0.5rem; /* equivalent to mt-2 */
+  color: #4B5563; /* equivalent to text-gray-600 */
+  line-height: 1.75; /* approximate for leading-relaxed */
+}

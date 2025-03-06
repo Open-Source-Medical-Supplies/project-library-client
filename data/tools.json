@@ -1,0 +1,14 @@
+[
+  {
+    "slug": "2d-inkprinter",
+    "name": "2D Inkprinter"
+  },
+  {
+    "slug": "laser-cutter",
+    "name": "Laser Cutter"
+  },
+  {
+    "slug": "3d-printer",
+    "name": "3D Printer"
+  }
+]
