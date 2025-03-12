@@ -21,7 +21,21 @@ const App = () => {
   });
   const [selectedCategoryFilters, setSelectedCategoryFilters] = useState<Category[]>([]);
   const [showAllCategoryFilters, setShowAllCategoryFilters] = useState(false);
-  const uniqueCategoryFilters = categories || [];
+  let uniqueCategoryFilters = categories || [];
+
+  //  Sort selected items to top of the list
+  uniqueCategoryFilters = uniqueCategoryFilters.sort((a, b) => {
+      // Primary sort: first by selectedCategoryFilters
+      if (selectedCategoryFilters.includes(a) && !selectedCategoryFilters.includes(b)) {
+        return -1;
+      }
+      if (selectedCategoryFilters.includes(b) && !selectedCategoryFilters.includes(a)) {
+        return 1;
+      }
+      // Secondary sort: if neither is selected, sort alphabetically
+      return a.name.localeCompare(b.name);
+  });
+  
   const visibleCategoryFilters = showAllCategoryFilters
     ? uniqueCategoryFilters
     : uniqueCategoryFilters.slice(0, 10);
@@ -102,7 +116,6 @@ const App = () => {
           </button> */}
         </div>
       </div>
-
       <div className={styles.mainContent}>
         <div className={styles.filterSidebar}>
           <FilterSection
@@ -147,7 +160,6 @@ const App = () => {
               <p className={styles.noResultsText}>No categories found.</p>
             )}
           </div>
-
           {sortedProjects.length > 0 && (
             <div className={styles.projectsSection}>
               <h2 className={styles.sectionTitle}>Projects</h2>

@@ -13,7 +13,6 @@ const CategoryCard: React.FC<CategoryCardProps> = ({
   filterProjectsByCategory,
 }) => {
   const imagePath = primaryImage && primaryImage !== '' ? primaryImage : 'https://placehold.co/100x100';
-
   return (
     <div className={styles.categoryContainer}>
       <div className={styles.cardContent}>

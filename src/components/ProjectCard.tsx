@@ -2,8 +2,6 @@ import { Project } from "../types";
 import dayjs from "dayjs";
 import styles from "./ProjectCard.module.css";
 
-// Individual project card component rendered in search results.
-// Note this component links to a Webflow template.
 const ProjectCard: React.FC<Project> = ({
   name,
   description,
@@ -24,7 +22,6 @@ const ProjectCard: React.FC<Project> = ({
             />
           )}
         </div>
-
         <div className={styles.details}>
           <h3 className={styles.title}>{name}</h3>
           <h4 className={styles.attribution}>{attributionOrganization}</h4>
