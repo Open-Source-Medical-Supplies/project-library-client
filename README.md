@@ -18,13 +18,13 @@ This repository provides a **React + TypeScript** application that manages and d
 
 ## Overview
 
-The **Project Library Client** is a React-powered SPA (Single Page Application) built with TypeScript. It showcases a list of projects, devices, or other content. The core architecture uses [Vite](https://vitejs.dev/) to provide:
+The **Project Library Client** is a React-powered SPA (Single Page Application) built Vite and TypeScript. It showcases a list of projects and research categories The core architecture uses [Vite](https://vitejs.dev/) to provide:
 
 - Fast module bundling and hot-module reloading.
 - A streamlined, minimal configuration setup for React + TypeScript.
 - Easy integration of external libraries.
 
-This project highlights modular design through custom hooks, modular components, and JSON-based data sources.
+This project applies modular design through custom hooks, modular components, and JSON-based data sources.
 
 ---
 
@@ -53,15 +53,34 @@ This project highlights modular design through custom hooks, modular components,
 ## Local Development
 
 1. **Install Dependencies**:
+
+The application depends on Node.js and npm. You will need to install these first.
+
    ```bash
    npm install
    ```
-2. **Start Development Server**:
+2. **Set environment variables**
+
+The application depends a few environment variables to run. You can create a `.env` file in the root of the project with the following variables:
+
+```Shell
+# Base URL for Supabase Function API Endpoints
+VITE_API_URL=""
+# Supabase API Key (Anonymous Key)
+VITE_SUPABASE_API_KEY=""
+# Used for uploading assets to Supabase Storage
+SUPABASE_SERVICE_KEY=""
+```
+
+If you are testing against the production DB and API you will need to be invited to the Supabase project to get the API keys.
+If you are running the Supabase app locally, you can use the `supabase status` command to get the local credentials.
+
+3. **Start Development Server**:
    ```bash
    npm run dev
    ```
    This will launch the Vite development server, typically at `http://localhost:5173`. Hot-module reloading (HMR) minimzes refresh time during development.
-3. **Lint & Format**:
+4. **Lint & Format**:
    ```bash
    npm run lint
    ```
@@ -71,7 +90,7 @@ This project highlights modular design through custom hooks, modular components,
 
 ## Deployment
 
-When ready to deploy:
+Deployment depends on having the the production credentials for Supabase. Assuming you've set up the environment variables and run `supabase login` you can run the deploy command to upload the entry JS file to Supabase Storage.
 
 1. **Build for Production**:
    ```bash
@@ -84,17 +103,8 @@ When ready to deploy:
 
 Go into the settings for the home page in Webflow. in the `Before </body> tag`
 
----
+Note: There may be a programmatic way to upload this tag using a Webflow Application. https://developers.webflow.com/v2.0.0/data/docs/custom-code
 
-## Additional Notes
+### Contributing
 
-- **Integration with Webflow-API**: The `webflow-api` package is present in `package.json`, which could be used to programmatically manage your Webflow CMS content if needed.
-- **Data Sources**: Demo data (skills, tools) are loaded from JSON files in the `/data` directory. In a real production environment, hooking the app to an external API or a backend is recommended.
-- **Testing**: Basic tests in `src/tests` can be extended with your own.
-- **Environment Variables**: If you require environment-specific configuration (keys, endpoints, etc.), set them with `.env` files or other secure solutions. Vite will expose those starting with `VITE_`.
-
----
-
-### Thank You
-
-Thank you for choosing this Project Library Client to embed into your Webflow site! If you have any issues, feel free to open an issue or contribute.
+Thank you for your interest in the Open Source Medical Supplies Project Library! If you are interested in contributing please send an email to info@opensourcemedicalsupplies.org.
