@@ -1,10 +1,9 @@
 .appContainer {
   display: block;
   /* max-width: 1280px; */
-  margin: auto;
   padding: 2rem 1.5rem;
   min-height: 100vh;
-  /* background-color: #F6F6F6; */
+  background-color: #F6F6F6;
 }
 
 .searchSection {
