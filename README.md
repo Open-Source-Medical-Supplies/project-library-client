@@ -1,6 +1,6 @@
 # Project Library Client
 
-This repository provides a **React + TypeScript** application that manages and displays a set of projects or devices. It is built with **Vite** for modern, fast development and bundling. The application is intended to be embedded within a Webflow-based site, with production build files hosted on a Supabase Storage CDN.
+This repository provides a **React + TypeScript** application that manages and displays a set of projects or devices. It is designed to be embedded in a Webflow site and uses Supabase for data storage and hosting. I works in conjunction with the Webflow CMS.
 
 ---
 
