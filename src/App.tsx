@@ -11,7 +11,6 @@ import SelectionFilter from './components/SelectionFilter';
 import styles from './App.module.css';
 
 const App = () => {
-  const { data: categories } = useCategories();
   const [localSearch, setLocalSearch] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
   const [sortOption] = useState('Most Recent');
@@ -25,12 +24,28 @@ const App = () => {
     };
   }, [localSearch]);
 
+
+  // -- Needs some stuff from filters -- // 
+
+  const filterProjectsByCategory = (categoryToken: string) => {
+    const category = categories?.find((cat) => cat.token === categoryToken);
+    if (!category) return;
+    setSelectedCategoryFilters([category]);
+    setSearchQuery('');
+  };
+
   // --- Filters' State --- //
+
+  // preamble
+
+
 
   // 2/7: visibleCategoryFilters
   // Part I
+  // Show all or show 10
   const [showAllCategoryFilters, setShowAllCategoryFilters] = useState(false);
   // Part II
+  const { data: categories } = useCategories();
   let uniqueCategoryFilters = categories || [];
   // Part III
   const visibleCategoryFilters = showAllCategoryFilters
@@ -53,12 +68,7 @@ const App = () => {
   });
   
 
-  const filterProjectsByCategory = (categoryToken: string) => {
-    const category = categories?.find((cat) => cat.token === categoryToken);
-    if (!category) return;
-    setSelectedCategoryFilters([category]);
-    setSearchQuery('');
-  };
+
 
   const {
     data: filteredCategories = [],
@@ -105,10 +115,10 @@ const App = () => {
 
   return (
     <div className={styles.appContainer}>
+      
       <div className={styles.searchSection}>
         <div className={styles.searchBar}>
           <div className={styles.inputWrapper}>
-
             <input
               type="text"
               placeholder="What are you looking for?"
@@ -135,8 +145,10 @@ const App = () => {
           </button> */}
         </div>
       </div>
+
       <div className={styles.mainContent}>
         <div className={styles.filterSidebar}>
+
           <FilterSection
             title="Filter By Category"
             items={visibleCategoryFilters}
@@ -158,12 +170,13 @@ const App = () => {
               )
             }
           />
+
           {/* TODO: Add skill and tool filters */}
           <SelectionFilter
             title="Filter By Category"
             items={visibleCategoryFilters}
             selectedItems={selectedCategoryFilters}
-            isOpen={filterStates.category}
+            //isOpen={filterStates.category}
             onToggle={() => toggleFilter('category')}
             onChange={handleCategoryFilterChange as (item: FilterType, checked: boolean) => void}
             renderFooter={() =>
@@ -184,7 +197,7 @@ const App = () => {
             title="Filter By Category"
             items={visibleCategoryFilters}
             selectedItems={selectedCategoryFilters}
-            isOpen={filterStates.category}
+            //isOpen={filterStates.category}
             onToggle={() => toggleFilter('category')}
             onChange={handleCategoryFilterChange as (item: FilterType, checked: boolean) => void}
             renderFooter={() =>
@@ -202,6 +215,7 @@ const App = () => {
             }
           />          
         </div>
+
         <div className={styles.contentArea}>
           <h2 className={styles.sectionTitle}>All Categories</h2>
           <div className={styles.categoriesSection}>

@@ -4,6 +4,7 @@ import { ChevronDown, ChevronUp } from 'lucide-react';
 import { FilterType } from '../types';
 import styles from './SelectionFilter.module.css';
 import { SelectionFilterProps } from './SelectionFilterUtils';
+import { useState } from 'react';
 
 
 /* TODOs
@@ -11,25 +12,57 @@ import { SelectionFilterProps } from './SelectionFilterUtils';
 although it would make things cleaner
 would it make them simpler and easier to maintain
 from the perspective of the rest of the project?
-o - Make 
+o - What I'm doing: put all the spec in a utils file, make this thing handle its
+    own business in at least two phases:
+    1. Make a generic thing, and then make specific versions of it, for:
+        - skills
+        - tools
+    2. Assess how state interacts with the rest of the page. If this can handle its
+    own state, that could be a cleanliness win. 
+o - Interesting - the data is small enough that we have it all at once. 
+*/
+/*
+interface SkillsFilterProps
+
+
+const SkillsFilter: React.FC<> = ({
+    title,
+    items,
+    selectedItems,//
+    isOpen,
+    onToggle,
+    onChange,
+    renderFooter,
+})
 */
 
-
+export interface SelectionFilterProps {
+    isOpen: boolean;
+    items: FilterType[];
+    onChange: (item: FilterType, checked: boolean) => void;
+    onToggle: () => void;
+    selectedItems: FilterType[];
+    title: string;
+}
 
 
 const SelectionFilter: React.FC<ExtendedSelectionFilterProps> = ({
-  title,
+  //title, // Title can come in
   items,
   selectedItems,//
-  isOpen,
+  //isOpen,
   onToggle,
   onChange,
   renderFooter,
 }) => {
+
+    const [isOpen, setIsOpen] = useState<boolean>(true);
+
+    var title = "foobar";
   return (
     <div className={styles.selectionFilter}>
 
-      <button onClick={onToggle} className={styles.toggleButton}>
+      <button onClick={() => setIsOpen(!isOpen)} className={styles.toggleButton}>
         <span className={styles.title}>{title}</span>
         <span>{isOpen ? <ChevronUp size={20} /> : <ChevronDown size={20} />}</span>
       </button>
