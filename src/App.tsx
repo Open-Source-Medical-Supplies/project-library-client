@@ -7,6 +7,7 @@ import { Category, FilterType, Project } from './types';
 import { sortItems } from './utilities';
 import { useFilteredProjects } from './hooks/use-projects';
 import { useCategories, useFilteredCategories } from './hooks/use-categories';
+import SelectionFilter from './components/SelectionFilter';
 import styles from './App.module.css';
 
 const App = () => {
@@ -14,15 +15,30 @@ const App = () => {
   const [localSearch, setLocalSearch] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
   const [sortOption] = useState('Most Recent');
-  const [filterStates, setFilterStates] = useState({
-    category: true,
-    skills: true,
-    tools: true,
-  });
-  const [selectedCategoryFilters, setSelectedCategoryFilters] = useState<Category[]>([]);
-  const [showAllCategoryFilters, setShowAllCategoryFilters] = useState(false);
-  let uniqueCategoryFilters = categories || [];
 
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setSearchQuery(localSearch);
+    }, 300);
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [localSearch]);
+
+  // --- Filters' State --- //
+
+  // 2/7: visibleCategoryFilters
+  // Part I
+  const [showAllCategoryFilters, setShowAllCategoryFilters] = useState(false);
+  // Part II
+  let uniqueCategoryFilters = categories || [];
+  // Part III
+  const visibleCategoryFilters = showAllCategoryFilters
+  ? uniqueCategoryFilters
+  : uniqueCategoryFilters.slice(0, 10);
+
+  // 3/7 Selected Category Filters + co
+  const [selectedCategoryFilters, setSelectedCategoryFilters] = useState<Category[]>([]);
   //  Sort selected items to top of the list
   uniqueCategoryFilters = uniqueCategoryFilters.sort((a, b) => {
       // Primary sort: first by selectedCategoryFilters
@@ -36,23 +52,7 @@ const App = () => {
       return a.name.localeCompare(b.name);
   });
   
-  const visibleCategoryFilters = showAllCategoryFilters
-    ? uniqueCategoryFilters
-    : uniqueCategoryFilters.slice(0, 10);
 
-  const toggleFilter = (key: keyof typeof filterStates) => {
-    setFilterStates((prev) => ({ ...prev, [key]: !prev[key] }));
-  };
-
-  const createFilterHandler = <T extends { token: string }>(
-    setter: React.Dispatch<React.SetStateAction<T[]>>
-  ) => (item: T, checked: boolean) => {
-    setter((prev) =>
-      checked ? [...prev, item] : prev.filter((i) => i.token !== item.token)
-    );
-  };
-
-  const handleCategoryFilterChange = createFilterHandler<Category>(setSelectedCategoryFilters);
   const filterProjectsByCategory = (categoryToken: string) => {
     const category = categories?.find((cat) => cat.token === categoryToken);
     if (!category) return;
@@ -76,20 +76,39 @@ const App = () => {
     sortedProjects = sortItems(filteredProjects, sortOption);
   }
 
-  useEffect(() => {
-    const handler = setTimeout(() => {
-      setSearchQuery(localSearch);
-    }, 300);
-    return () => {
-      clearTimeout(handler);
-    };
-  }, [localSearch]);
+  // 4/7: filterstates.category
+  const [filterStates, setFilterStates] = useState({
+    category: true,
+    skills: true,
+    tools: true,
+  });
+
+  // 5/7: toggleFilter
+  const toggleFilter = (key: keyof typeof filterStates) => {
+    setFilterStates((prev) => ({ ...prev, [key]: !prev[key] }));
+  };
+
+  // 6/7: handleCategoryFilterChange
+  // part I/II
+  const createFilterHandler = <T extends { token: string }>(
+    setter: React.Dispatch<React.SetStateAction<T[]>>
+  ) => (item: T, checked: boolean) => {
+    setter((prev) =>
+      checked ? [...prev, item] : prev.filter((i) => i.token !== item.token)
+    );
+  };
+  // part II//II
+  const handleCategoryFilterChange = createFilterHandler<Category>(setSelectedCategoryFilters);  
+
+  // -- End Section on Filters' State -- // 
+
 
   return (
     <div className={styles.appContainer}>
       <div className={styles.searchSection}>
         <div className={styles.searchBar}>
           <div className={styles.inputWrapper}>
+
             <input
               type="text"
               placeholder="What are you looking for?"
@@ -140,6 +159,48 @@ const App = () => {
             }
           />
           {/* TODO: Add skill and tool filters */}
+          <SelectionFilter
+            title="Filter By Category"
+            items={visibleCategoryFilters}
+            selectedItems={selectedCategoryFilters}
+            isOpen={filterStates.category}
+            onToggle={() => toggleFilter('category')}
+            onChange={handleCategoryFilterChange as (item: FilterType, checked: boolean) => void}
+            renderFooter={() =>
+              uniqueCategoryFilters.length > 10 && (
+                <button
+                  className={styles.footerButton}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setShowAllCategoryFilters((prev) => !prev);
+                  }}
+                >
+                  {showAllCategoryFilters ? 'Show Less' : 'View All'}
+                </button>
+              )
+            }
+          />
+          <SelectionFilter
+            title="Filter By Category"
+            items={visibleCategoryFilters}
+            selectedItems={selectedCategoryFilters}
+            isOpen={filterStates.category}
+            onToggle={() => toggleFilter('category')}
+            onChange={handleCategoryFilterChange as (item: FilterType, checked: boolean) => void}
+            renderFooter={() =>
+              uniqueCategoryFilters.length > 10 && (
+                <button
+                  className={styles.footerButton}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setShowAllCategoryFilters((prev) => !prev);
+                  }}
+                >
+                  {showAllCategoryFilters ? 'Show Less' : 'View All'}
+                </button>
+              )
+            }
+          />          
         </div>
         <div className={styles.contentArea}>
           <h2 className={styles.sectionTitle}>All Categories</h2>
