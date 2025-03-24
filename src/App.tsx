@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { Search } from 'lucide-react';
-import FilterSection from './components/FilterSection';
 import CategoryCard from './components/CategoryCard';
 import ProjectCard from './components/ProjectCard';
 import { Category, FilterType, Project } from './types';
@@ -29,6 +28,7 @@ const App = () => {
 
   const { data: categories } = useCategories();
 
+
   // -- Needs some stuff from filters -- // 
 
   const filterProjectsByCategory = (categoryToken: string) => {
@@ -38,18 +38,8 @@ const App = () => {
     setSearchQuery('');
   };
 
-  // --- Filters' State --- //
 
-  // 2/7: visibleCategoryFilters
-  // Part I
-  // Show all or show 10
-  //const [showAllCategoryFilters, setShowAllCategoryFilters] = useState(false);
-  // Part II
-  //let uniqueCategoryFilters = categories || [];
-  // Part III
-  /*const visibleCategoryFilters = uniqueCategoryFilters
-  ? uniqueCategoryFilters
-  : uniqueCategoryFilters.slice(0, 10);*/
+  // --- Filters' State --- //
 
   // 3/7 Selected Category Filters + co
   const [selectedCategoryFilters, setSelectedCategoryFilters] = useState<Category[]>([]);
@@ -97,7 +87,6 @@ const App = () => {
   const handleCategoryFilterChange = createFilterHandler<Category>(setSelectedCategoryFilters);  
 
   // -- End Section on Filters' State -- // 
-
 
   return (
     <div className={styles.appContainer}>
