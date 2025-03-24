@@ -25,6 +25,10 @@ const App = () => {
   }, [localSearch]);
 
 
+  // -- Accessing source of truth -- //
+
+  const { data: categories } = useCategories();
+
   // -- Needs some stuff from filters -- // 
 
   const filterProjectsByCategory = (categoryToken: string) => {
@@ -36,25 +40,21 @@ const App = () => {
 
   // --- Filters' State --- //
 
-  // preamble
-
-
-
   // 2/7: visibleCategoryFilters
   // Part I
   // Show all or show 10
-  const [showAllCategoryFilters, setShowAllCategoryFilters] = useState(false);
+  //const [showAllCategoryFilters, setShowAllCategoryFilters] = useState(false);
   // Part II
-  const { data: categories } = useCategories();
-  let uniqueCategoryFilters = categories || [];
+  //let uniqueCategoryFilters = categories || [];
   // Part III
-  const visibleCategoryFilters = showAllCategoryFilters
+  /*const visibleCategoryFilters = uniqueCategoryFilters
   ? uniqueCategoryFilters
-  : uniqueCategoryFilters.slice(0, 10);
+  : uniqueCategoryFilters.slice(0, 10);*/
 
   // 3/7 Selected Category Filters + co
   const [selectedCategoryFilters, setSelectedCategoryFilters] = useState<Category[]>([]);
   //  Sort selected items to top of the list
+  let uniqueCategoryFilters = categories || [];
   uniqueCategoryFilters = uniqueCategoryFilters.sort((a, b) => {
       // Primary sort: first by selectedCategoryFilters
       if (selectedCategoryFilters.includes(a) && !selectedCategoryFilters.includes(b)) {
@@ -66,9 +66,6 @@ const App = () => {
       // Secondary sort: if neither is selected, sort alphabetically
       return a.name.localeCompare(b.name);
   });
-  
-
-
 
   const {
     data: filteredCategories = [],
@@ -86,20 +83,9 @@ const App = () => {
     sortedProjects = sortItems(filteredProjects, sortOption);
   }
 
-  // 4/7: filterstates.category
-  const [filterStates, setFilterStates] = useState({
-    category: true,
-    skills: true,
-    tools: true,
-  });
-
-  // 5/7: toggleFilter
-  const toggleFilter = (key: keyof typeof filterStates) => {
-    setFilterStates((prev) => ({ ...prev, [key]: !prev[key] }));
-  };
-
   // 6/7: handleCategoryFilterChange
-  // part I/II
+  // part I/II: Make
+  // All this does, is either add an item, or drop an item. 
   const createFilterHandler = <T extends { token: string }>(
     setter: React.Dispatch<React.SetStateAction<T[]>>
   ) => (item: T, checked: boolean) => {
@@ -107,7 +93,7 @@ const App = () => {
       checked ? [...prev, item] : prev.filter((i) => i.token !== item.token)
     );
   };
-  // part II//II
+  // II: Use
   const handleCategoryFilterChange = createFilterHandler<Category>(setSelectedCategoryFilters);  
 
   // -- End Section on Filters' State -- // 
@@ -130,90 +116,36 @@ const App = () => {
               <Search size={20} />
             </button>
           </div>
-          {/* <select
-            value={sortOption}
-            onChange={(e) => setSortOption(e.target.value)}
-            className={styles.sortSelect}
-          >
-            <option value="Most Recent">Most Recent</option>
-            <option value="Oldest">Oldest</option>
-            <option value="A-Z">A-Z</option>
-            <option value="Z-A">Z-A</option>
-          </select> */}
-          {/* <button className={styles.searchButton}>
-            Search
-          </button> */}
         </div>
       </div>
 
       <div className={styles.mainContent}>
         <div className={styles.filterSidebar}>
 
-          <FilterSection
+          {/* This ideally moves to being a map of three types to one filter
+              all passed the same data, given its small size (can be api call when larger, np) */}
+          <SelectionFilter
             title="Filter By Category"
-            items={visibleCategoryFilters}
+            items={categories}
             selectedItems={selectedCategoryFilters}
-            isOpen={filterStates.category}
-            onToggle={() => toggleFilter('category')}
-            onChange={handleCategoryFilterChange as (item: FilterType, checked: boolean) => void}
-            renderFooter={() =>
-              uniqueCategoryFilters.length > 10 && (
-                <button
-                  className={styles.footerButton}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setShowAllCategoryFilters((prev) => !prev);
-                  }}
-                >
-                  {showAllCategoryFilters ? 'Show Less' : 'View All'}
-                </button>
-              )
-            }
+            onChange={handleCategoryFilterChange}
           />
 
           {/* TODO: Add skill and tool filters */}
           <SelectionFilter
             title="Filter By Category"
-            items={visibleCategoryFilters}
+            items={categories}
             selectedItems={selectedCategoryFilters}
-            //isOpen={filterStates.category}
-            onToggle={() => toggleFilter('category')}
-            onChange={handleCategoryFilterChange as (item: FilterType, checked: boolean) => void}
-            renderFooter={() =>
-              uniqueCategoryFilters.length > 10 && (
-                <button
-                  className={styles.footerButton}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setShowAllCategoryFilters((prev) => !prev);
-                  }}
-                >
-                  {showAllCategoryFilters ? 'Show Less' : 'View All'}
-                </button>
-              )
-            }
+            onChange={handleCategoryFilterChange}
           />
+
           <SelectionFilter
             title="Filter By Category"
-            items={visibleCategoryFilters}
+            items={categories}
             selectedItems={selectedCategoryFilters}
-            //isOpen={filterStates.category}
-            onToggle={() => toggleFilter('category')}
-            onChange={handleCategoryFilterChange as (item: FilterType, checked: boolean) => void}
-            renderFooter={() =>
-              uniqueCategoryFilters.length > 10 && (
-                <button
-                  className={styles.footerButton}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setShowAllCategoryFilters((prev) => !prev);
-                  }}
-                >
-                  {showAllCategoryFilters ? 'Show Less' : 'View All'}
-                </button>
-              )
-            }
-          />          
+            onChange={handleCategoryFilterChange}
+          />
+
         </div>
 
         <div className={styles.contentArea}>

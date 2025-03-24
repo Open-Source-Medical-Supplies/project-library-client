@@ -4,7 +4,7 @@ import { ChevronDown, ChevronUp } from 'lucide-react';
 import { FilterType } from '../types';
 import styles from './SelectionFilter.module.css';
 import { SelectionFilterProps } from './SelectionFilterUtils';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 
 /* TODOs
@@ -45,20 +45,26 @@ export interface SelectionFilterProps {
     title: string;
 }
 
+var renderCount = 0; 
 
 const SelectionFilter: React.FC<ExtendedSelectionFilterProps> = ({
-  //title, // Title can come in
-  items,
-  selectedItems,//
-  //isOpen,
-  onToggle,
+  title, 
+  items,  // TODO actually just a note: items to come in a table: filter, type (eg skills), checked, 
+  selectedItems,
   onChange,
-  renderFooter,
+  //renderFooter,
 }) => {
 
+    
     const [isOpen, setIsOpen] = useState<boolean>(true);
+    const [showAll, setShowAll] = useState<boolean>(false);
+    useEffect(() => {}, [showAll])
 
-    var title = "foobar";
+    // dev, observe state changes
+
+    console.log('Re-renders: ', ++renderCount, '; State of showAll: ', showAll);
+
+    //var title = "foobar";
   return (
     <div className={styles.selectionFilter}>
 
@@ -69,8 +75,8 @@ const SelectionFilter: React.FC<ExtendedSelectionFilterProps> = ({
 
       {isOpen && (
         <div className={styles.itemsContainer}>
-
-          {items.map((item) => (
+           {console.log('items length:', items.length, 'slice end:', showAll ? items.length : 10)}
+          {items.slice(0, showAll ? items.length : 10).map((item) => (
             <label key={item.token} className={styles.itemLabel}>
               <input
                 type="checkbox"
@@ -84,7 +90,17 @@ const SelectionFilter: React.FC<ExtendedSelectionFilterProps> = ({
             </label>
           ))} 
 
-          {renderFooter && <div className={styles.footerContainer}>{renderFooter()}</div>}
+          {isOpen && <div className={styles.footerContainer}>{
+            <button
+              className={styles.footerButton}
+              onClick={(e) => {
+                e.stopPropagation();
+                setShowAll(!showAll);
+              }}
+            >
+              {showAll ? 'View Fewer' : 'View More'}
+            </button>
+          }</div>}
         </div>
       )}
     </div>
