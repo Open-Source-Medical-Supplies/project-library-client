@@ -16,7 +16,7 @@ createRoot(document.getElementById('root')!).render(
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<App />} />
+          <Route path="/project-library" element={<App />} />
           <Route path="research/:researchId" element={<ResearchPage />} />
           <Route path="projects/:projectId" element={<ProjectPage />} />
         </Routes>
