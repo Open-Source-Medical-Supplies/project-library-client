@@ -4,6 +4,7 @@ import { Category, Project } from '../types';
 import { PROJECTS_URL } from '../constants/url';
 
 export function useProjects(): UseQueryResult<Project[]> {
+  console.log('useProjects')
   const query = useQuery({
     queryKey: ['projects'],
     queryFn: () => fetch(PROJECTS_URL, {

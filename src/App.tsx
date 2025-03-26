@@ -29,10 +29,35 @@ const App = () => {
 
   // -- Accessing source of truth -- //
 
+  // 6/7: handleCategoryFilterChange
+  // part I/II: Make
+  // All this does, is either add an item, or drop an item. 
+  const createFilterHandler = <T extends { token: string }>(
+    setter: React.Dispatch<React.SetStateAction<T[]>>
+  ) => (item: T, checked: boolean) => {
+    setter((prev) =>
+      checked ? [...prev, item] : prev.filter((i) => i.token !== item.token)
+    );
+  };
+  // II: Use
+  //const handleCategoryFilterChange = createFilterHandler<Category>(setSelectedCategoryFilters);  
+
+
   const { data: categories } = useCategories();
+  const [selectedCategoryFilters, setSelectedCategoryFilters] = useState<Category[]>([]);
+  const handleCategoryFilterChange = createFilterHandler<Category>(setSelectedCategoryFilters);
+
   const { data: projects } = useProjects();
+  const [selectedProjectsFilters, setSelectedProjectsFilters] = useState<Category[]>([]);
+  const handleProjectsFilterChange = createFilterHandler<Category>(setSelectedProjectsFilters);
+
   const { data: skills } = useSkills();
+  const [selectedSkillsFilters, setSelectedSkillsFilters] = useState<Category[]>([]);
+  //const handleCategoryFilterChange = createFilterHandler<Category>(setSelectedCategoryFilters);
+
   const { data: tools } = useTools();
+  const [selectedToolsFilters, setSelectedToolsFilters] = useState<Category[]>([]);
+  //const handleCategoryFilterChange = createFilterHandler<Category>(setSelectedCategoryFilters);
 
 
   // -- Needs some stuff from filters -- // 
@@ -48,7 +73,7 @@ const App = () => {
   // --- Filters' State --- //
 
   // 3/7 Selected Category Filters + co
-  const [selectedCategoryFilters, setSelectedCategoryFilters] = useState<Category[]>([]);
+  //const [selectedCategoryFilters, setSelectedCategoryFilters] = useState<Category[]>([]);
  
   const {
     data: filteredCategories = [],
@@ -66,18 +91,6 @@ const App = () => {
     sortedProjects = sortItems(filteredProjects, sortOption);
   }
 
-  // 6/7: handleCategoryFilterChange
-  // part I/II: Make
-  // All this does, is either add an item, or drop an item. 
-  const createFilterHandler = <T extends { token: string }>(
-    setter: React.Dispatch<React.SetStateAction<T[]>>
-  ) => (item: T, checked: boolean) => {
-    setter((prev) =>
-      checked ? [...prev, item] : prev.filter((i) => i.token !== item.token)
-    );
-  };
-  // II: Use
-  const handleCategoryFilterChange = createFilterHandler<Category>(setSelectedCategoryFilters);  
 
   // -- End Section on Filters' State -- // 
 
@@ -115,10 +128,10 @@ const App = () => {
 
           {/* TODO: Add skill and tool filters */}
           <SelectionFilter
-            title="Filter By Projectss"
+            title="Filter By Projects"
             items={projects}
-            selectedItems={selectedCategoryFilters}
-            onChange={handleCategoryFilterChange}
+            selectedItems={selectedProjectsFilters}
+            onChange={handleProjectsFilterChange}
           />
 {/*
           <SelectionFilter
