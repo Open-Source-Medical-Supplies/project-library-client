@@ -22,6 +22,18 @@ const SelectionFilter: React.FC<SelectionFilterProps> = ({
   const [isOpen, setIsOpen] = useState<boolean>(true);
   const [showAll, setShowAll] = useState<boolean>(false);
 
+  items.sort((a, b) => {
+    // Primary sort: first by selectedItems
+    if (selectedItems.includes(a) && !selectedItems.includes(b)) {
+      return -1;
+    }
+    if (selectedItems.includes(b) && !selectedItems.includes(a)) {
+      return 1;
+    }
+    // Secondary sort: if neither is selected, sort alphabetically
+    return a.name.localeCompare(b.name);
+  });
+
   return (
     <div className={styles.selectionFilter}>
 

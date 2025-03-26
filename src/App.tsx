@@ -43,9 +43,7 @@ const App = () => {
 
   // 3/7 Selected Category Filters + co
   const [selectedCategoryFilters, setSelectedCategoryFilters] = useState<Category[]>([]);
-
-  /*
- */
+ 
   const {
     data: filteredCategories = [],
     isLoading: isLoadingCategories,
