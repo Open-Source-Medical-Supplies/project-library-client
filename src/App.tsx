@@ -4,7 +4,10 @@ import CategoryCard from './components/CategoryCard';
 import ProjectCard from './components/ProjectCard';
 import { Category, FilterType, Project } from './types';
 import { sortItems } from './utilities';
-import { useFilteredProjects } from './hooks/use-projects';
+
+import { useTools } from './hooks/use-tools';
+import { useSkills } from './hooks/use-skills';
+import { useProjects, useFilteredProjects } from './hooks/use-projects';
 import { useCategories, useFilteredCategories } from './hooks/use-categories';
 import SelectionFilter from './components/SelectionFilter';
 import styles from './App.module.css';
@@ -27,6 +30,9 @@ const App = () => {
   // -- Accessing source of truth -- //
 
   const { data: categories } = useCategories();
+  const { data: projects } = useProjects();
+  const { data: skills } = useSkills();
+  const { data: tools } = useTools();
 
 
   // -- Needs some stuff from filters -- // 
@@ -109,19 +115,26 @@ const App = () => {
 
           {/* TODO: Add skill and tool filters */}
           <SelectionFilter
+            title="Filter By Projectss"
+            items={projects}
+            selectedItems={selectedCategoryFilters}
+            onChange={handleCategoryFilterChange}
+          />
+{/*
+          <SelectionFilter
             title="Filter By Skills"
-            items={categories}
+            items={skills}
             selectedItems={selectedCategoryFilters}
             onChange={handleCategoryFilterChange}
           />
 
           <SelectionFilter
             title="Filter By Tools"
-            items={categories}
+            items={tools}
             selectedItems={selectedCategoryFilters}
             onChange={handleCategoryFilterChange}
           />
-
+*/}
         </div>
 
         <div className={styles.contentArea}>
