@@ -43,20 +43,9 @@ const App = () => {
 
   // 3/7 Selected Category Filters + co
   const [selectedCategoryFilters, setSelectedCategoryFilters] = useState<Category[]>([]);
-  //  Sort selected items to top of the list
-  let uniqueCategoryFilters = categories || [];
-  uniqueCategoryFilters = uniqueCategoryFilters.sort((a, b) => {
-      // Primary sort: first by selectedCategoryFilters
-      if (selectedCategoryFilters.includes(a) && !selectedCategoryFilters.includes(b)) {
-        return -1;
-      }
-      if (selectedCategoryFilters.includes(b) && !selectedCategoryFilters.includes(a)) {
-        return 1;
-      }
-      // Secondary sort: if neither is selected, sort alphabetically
-      return a.name.localeCompare(b.name);
-  });
 
+  /*
+ */
   const {
     data: filteredCategories = [],
     isLoading: isLoadingCategories,
@@ -122,14 +111,14 @@ const App = () => {
 
           {/* TODO: Add skill and tool filters */}
           <SelectionFilter
-            title="Filter By Category"
+            title="Filter By Skills"
             items={categories}
             selectedItems={selectedCategoryFilters}
             onChange={handleCategoryFilterChange}
           />
 
           <SelectionFilter
-            title="Filter By Category"
+            title="Filter By Tools"
             items={categories}
             selectedItems={selectedCategoryFilters}
             onChange={handleCategoryFilterChange}
