@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Search } from 'lucide-react';
 import CategoryCard from './components/CategoryCard';
 import ProjectCard from './components/ProjectCard';
-import { Category, FilterType, Project } from './types';
+import { Category, FilterType, Project, Skill, Tool } from './types';
 import { sortItems } from './utilities';
 
 import { useTools } from './hooks/use-tools';
@@ -46,18 +46,18 @@ const App = () => {
   const { data: categories } = useCategories();
   const [selectedCategoryFilters, setSelectedCategoryFilters] = useState<Category[]>([]);
   const handleCategoryFilterChange = createFilterHandler<Category>(setSelectedCategoryFilters);
-
+/*
   const { data: projects } = useProjects();
   const [selectedProjectsFilters, setSelectedProjectsFilters] = useState<Category[]>([]);
   const handleProjectsFilterChange = createFilterHandler<Category>(setSelectedProjectsFilters);
+*/
+  const skills = useSkills();
+  const [selectedSkillsFilters, setSelectedSkillsFilters] = useState<Skill[]>([]);
+  const handleSkillsFilterChange = createFilterHandler<Skill>(setSelectedSkillsFilters);
 
-  const { data: skills } = useSkills();
-  const [selectedSkillsFilters, setSelectedSkillsFilters] = useState<Category[]>([]);
-  //const handleCategoryFilterChange = createFilterHandler<Category>(setSelectedCategoryFilters);
-
-  const { data: tools } = useTools();
-  const [selectedToolsFilters, setSelectedToolsFilters] = useState<Category[]>([]);
-  //const handleCategoryFilterChange = createFilterHandler<Category>(setSelectedCategoryFilters);
+  const tools = useTools();
+  const [selectedToolsFilters, setSelectedToolsFilters] = useState<Tool[]>([]);
+  const handleToolsFilterChange = createFilterHandler<Category>(setSelectedToolsFilters);
 
 
   // -- Needs some stuff from filters -- // 
@@ -73,7 +73,6 @@ const App = () => {
   // --- Filters' State --- //
 
   // 3/7 Selected Category Filters + co
-  //const [selectedCategoryFilters, setSelectedCategoryFilters] = useState<Category[]>([]);
  
   const {
     data: filteredCategories = [],
@@ -126,28 +125,32 @@ const App = () => {
             onChange={handleCategoryFilterChange}
           />
 
-          {/* TODO: Add skill and tool filters */}
+{/*
+
           <SelectionFilter
             title="Filter By Projects"
             items={projects}
             selectedItems={selectedProjectsFilters}
             onChange={handleProjectsFilterChange}
           />
-{/*
+*/}
+          {/* TODO: Add skill and tool filters */}
+          {/* The problem is that skills just gets returned as such, no need to unpack; TODO unify data */}
           <SelectionFilter
             title="Filter By Skills"
             items={skills}
-            selectedItems={selectedCategoryFilters}
-            onChange={handleCategoryFilterChange}
+            selectedItems={selectedSkillsFilters}
+            onChange={handleSkillsFilterChange}
           />
+
 
           <SelectionFilter
             title="Filter By Tools"
             items={tools}
-            selectedItems={selectedCategoryFilters}
-            onChange={handleCategoryFilterChange}
+            selectedItems={selectedToolsFilters}
+            onChange={handleToolsFilterChange}  // works even though category style
           />
-*/}
+{/**/}
         </div>
 
         <div className={styles.contentArea}>
