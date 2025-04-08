@@ -42,7 +42,7 @@ export interface Skill {
 export interface Tool {
   name: string;
   slug: string;
-  token?: string;
+  token: string;
 }
 
 export type FilterType = CategoryData | Skill | Tool;

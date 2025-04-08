@@ -5,7 +5,7 @@ import ProjectCard from './components/ProjectCard';
 import { Category, FilterType, Project, Skill, Tool } from './types';
 import { sortItems } from './utilities';
 
-import { useTools } from './hooks/use-tools';
+import { useTools, useTools2 } from './hooks/use-tools';
 import { useSkills } from './hooks/use-skills';
 import { useProjects, useFilteredProjects } from './hooks/use-projects';
 import { useCategories, useFilteredCategories } from './hooks/use-categories';
@@ -56,6 +56,8 @@ const App = () => {
   const handleSkillsFilterChange = createFilterHandler<Skill>(setSelectedSkillsFilters);
 
   const tools = useTools();
+  const tools2 = useTools2();
+  console.log(tools2)
   const [selectedToolsFilters, setSelectedToolsFilters] = useState<Tool[]>([]);
   const handleToolsFilterChange = createFilterHandler<Category>(setSelectedToolsFilters);
 
