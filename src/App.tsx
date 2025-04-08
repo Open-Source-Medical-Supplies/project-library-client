@@ -31,7 +31,7 @@ const App = () => {
 
   // 6/7: handleCategoryFilterChange
   // part I/II: Make
-  // All this does, is either add an item, or drop an item. 
+  // All this does, is either add an item, or drop an item.
   const createFilterHandler = <T extends { token: string }>(
     setter: React.Dispatch<React.SetStateAction<T[]>>
   ) => (item: T, checked: boolean) => {
@@ -60,8 +60,11 @@ const App = () => {
   const handleToolsFilterChange = createFilterHandler<Category>(setSelectedToolsFilters);
 
 
-  // -- Needs some stuff from filters -- // 
+  // -- Needs some stuff from filters -- //
 
+  // TODO: Need one of these for skills, tools.
+  // or unify them all in some way. That's better.
+  // Done fast first then perfect as time allows. 
   const filterProjectsByCategory = (categoryToken: string) => {
     const category = categories?.find((cat) => cat.token === categoryToken);
     if (!category) return;
@@ -73,7 +76,7 @@ const App = () => {
   // --- Filters' State --- //
 
   // 3/7 Selected Category Filters + co
- 
+
   const {
     data: filteredCategories = [],
     isLoading: isLoadingCategories,
@@ -91,14 +94,16 @@ const App = () => {
   }
 
 
-  // -- End Section on Filters' State -- // 
+  // -- End Section on Filters' State -- //
 
   return (
     <div className={styles.appContainer}>
-      
+
+      {/* Search Box */}
       <div className={styles.searchSection}>
         <div className={styles.searchBar}>
           <div className={styles.inputWrapper}>
+
             <input
               type="text"
               placeholder="What are you looking for?"
@@ -106,14 +111,20 @@ const App = () => {
               value={localSearch}
               onChange={(e) => setLocalSearch(e.target.value)}
             />
+
             <button className={styles.searchIcon}>
               <Search size={20} />
             </button>
+
           </div>
         </div>
       </div>
 
+
+      {/* Everything Else: Sidebar and Main Region */}
       <div className={styles.mainContent}>
+
+        {/* Sidebar Region */}
         <div className={styles.filterSidebar}>
 
           {/* This ideally moves to being a map of three types to one filter
@@ -150,11 +161,17 @@ const App = () => {
             selectedItems={selectedToolsFilters}
             onChange={handleToolsFilterChange}  // works even though category style
           />
-{/**/}
-        </div>
 
+        </div>
+        {/* End of Sidebar */}
+
+
+        {/* Non-Sidebar Main Region contains Categories and Projects*/}
         <div className={styles.contentArea}>
+
           <h2 className={styles.sectionTitle}>All Categories</h2>
+
+          {/* Categories Region */}
           <div className={styles.categoriesSection}>
             {isLoadingCategories ? (
               <div>Loading...</div>
@@ -172,6 +189,9 @@ const App = () => {
               <p className={styles.noResultsText}>No categories found.</p>
             )}
           </div>
+
+
+          {/* Projects Region */}
           {sortedProjects.length > 0 && (
             <div className={styles.projectsSection}>
               <h2 className={styles.sectionTitle}>Projects</h2>
@@ -182,7 +202,10 @@ const App = () => {
               </div>
             </div>
           )}
+
         </div>
+        {/* End of Main Region */}
+
       </div>
     </div>
   );
