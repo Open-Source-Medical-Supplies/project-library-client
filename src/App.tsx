@@ -55,9 +55,12 @@ const App = () => {
   const [selectedSkillsFilters, setSelectedSkillsFilters] = useState<Skill[]>([]);
   const handleSkillsFilterChange = createFilterHandler<Skill>(setSelectedSkillsFilters);
 
-  const tools = useTools();
-  const tools2 = useTools2();
-  console.log(tools2)
+  //const tools = useTools();
+  //console.log(tools)
+
+  const { data: tools } = useTools2();
+  //console.log(tools2)
+  
   const [selectedToolsFilters, setSelectedToolsFilters] = useState<Tool[]>([]);
   const handleToolsFilterChange = createFilterHandler<Category>(setSelectedToolsFilters);
 

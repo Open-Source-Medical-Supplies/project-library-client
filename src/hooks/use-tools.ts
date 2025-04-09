@@ -20,6 +20,8 @@ export function useTools2(): UseQueryResult<Tool[]> {
     }).then(parseResponse),
   });
 
+  //console.log(query)
+
   return {
     ...query,
     data: query?.data || [],
