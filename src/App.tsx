@@ -50,11 +50,11 @@ const App = () => {
   const { data: projects } = useProjects();
   const [selectedProjectsFilters, setSelectedProjectsFilters] = useState<Category[]>([]);
   const handleProjectsFilterChange = createFilterHandler<Category>(setSelectedProjectsFilters);
-*/
+
   const skills = useSkills();
   const [selectedSkillsFilters, setSelectedSkillsFilters] = useState<Skill[]>([]);
   const handleSkillsFilterChange = createFilterHandler<Skill>(setSelectedSkillsFilters);
-
+*/
   const { data: tools } = useTools();
   const [selectedToolFilters, setSelectedToolFilters] = useState<Tool[]>([]);
   const handleToolFilterChange = createFilterHandler<Category>(setSelectedToolFilters);
@@ -62,15 +62,6 @@ const App = () => {
 
   // -- Needs some stuff from filters -- //
 
-  // TODO: Need one of these for skills, tools.
-  // or unify them all in some way. That's better.
-  // Done fast first then perfect as time allows. 
-  const filterProjectsByCategory = (categoryToken: string) => {
-    const category = categories?.find((cat) => cat.token === categoryToken);
-    if (!category) return;
-    setSelectedCategoryFilters([category]);
-    setSearchQuery('');
-  };
 
 
   // --- Filters' State --- //
@@ -87,12 +78,24 @@ const App = () => {
     selectedCategoryFilters,
     selectedToolFilters
   ).data || [];
+  console.log(filteredProjects.length)
 
   const sortedCategories = sortItems(filteredCategories, sortOption);
   let sortedProjects = [] as Project[];
-  if (searchQuery !== '' || selectedCategoryFilters.length > 0) {
+  if (searchQuery !== '' || 
+    selectedCategoryFilters.length > 0 || 
+    selectedToolFilters.length > 0) {
     sortedProjects = sortItems(filteredProjects, sortOption);
   }
+
+
+  // Used in category card rendering only, to snap filterint to exactly one. 
+  const filterProjectsByCategory = (categoryToken: string) => {
+    const category = categories?.find((cat) => cat.token === categoryToken);
+    if (!category) return;
+    setSelectedCategoryFilters([category]);
+    setSearchQuery('');
+  };
 
 
   // -- End Section on Filters' State -- //

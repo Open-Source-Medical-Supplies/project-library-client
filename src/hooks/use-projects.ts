@@ -33,6 +33,7 @@ export function useFilteredProjects(
       'filteredProjects',
       searchQuery,
       selectedCategoryFilters,
+      selectedToolFilters
     ],
     queryFn: () => fetch(PROJECTS_URL, {
       method: 'POST',
