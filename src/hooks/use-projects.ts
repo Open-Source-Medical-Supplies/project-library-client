@@ -1,7 +1,8 @@
 import { useQuery, UseQueryResult } from '@tanstack/react-query';
 import { HEADERS, parseResponse } from './core';
-import { Category, Project } from '../types';
+import { Category, Project, Tool } from '../types';
 import { PROJECTS_URL } from '../constants/url';
+
 
 export function useProjects(): UseQueryResult<Project[]> {
   console.log('useProjects')
@@ -24,7 +25,9 @@ export function useProjects(): UseQueryResult<Project[]> {
 export function useFilteredProjects(
   searchQuery: string,
   selectedCategoryFilters?: Category[],
+  selectedToolFilters?: Tool[]
 ): UseQueryResult<Project[]> {
+  console.log('useProjects. ', selectedToolFilters)
   const query = useQuery({
     queryKey: [
       'filteredProjects',
@@ -37,8 +40,13 @@ export function useFilteredProjects(
       headers: HEADERS,
       body: JSON.stringify({
         search: searchQuery,
+
+        // This is where the items are rendered into a string of comma separated values
         categoryTokens: selectedCategoryFilters
           ?.map((category) => category.token).join(','),
+
+        // This must match the edge function "Projects"
+        toolTokens: selectedToolFilters?.map((u) => u.token).join(',')
       }),
     }).then(parseResponse),
   });

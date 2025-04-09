@@ -5,7 +5,7 @@ import ProjectCard from './components/ProjectCard';
 import { Category, FilterType, Project, Skill, Tool } from './types';
 import { sortItems } from './utilities';
 
-import { useTools, useTools2 } from './hooks/use-tools';
+import { useTools } from './hooks/use-tools';
 import { useSkills } from './hooks/use-skills';
 import { useProjects, useFilteredProjects } from './hooks/use-projects';
 import { useCategories, useFilteredCategories } from './hooks/use-categories';
@@ -55,14 +55,9 @@ const App = () => {
   const [selectedSkillsFilters, setSelectedSkillsFilters] = useState<Skill[]>([]);
   const handleSkillsFilterChange = createFilterHandler<Skill>(setSelectedSkillsFilters);
 
-  //const tools = useTools();
-  //console.log(tools)
-
-  const { data: tools } = useTools2();
-  //console.log(tools2)
-  
-  const [selectedToolsFilters, setSelectedToolsFilters] = useState<Tool[]>([]);
-  const handleToolsFilterChange = createFilterHandler<Category>(setSelectedToolsFilters);
+  const { data: tools } = useTools();
+  const [selectedToolFilters, setSelectedToolFilters] = useState<Tool[]>([]);
+  const handleToolFilterChange = createFilterHandler<Category>(setSelectedToolFilters);
 
 
   // -- Needs some stuff from filters -- //
@@ -90,6 +85,7 @@ const App = () => {
   const filteredProjects = useFilteredProjects(
     searchQuery,
     selectedCategoryFilters,
+    selectedToolFilters
   ).data || [];
 
   const sortedCategories = sortItems(filteredCategories, sortOption);
@@ -141,30 +137,20 @@ const App = () => {
             onChange={handleCategoryFilterChange}
           />
 
-{/*
-
-          <SelectionFilter
-            title="Filter By Projects"
-            items={projects}
-            selectedItems={selectedProjectsFilters}
-            onChange={handleProjectsFilterChange}
-          />
-*/}
-          {/* TODO: Add skill and tool filters */}
-          {/* The problem is that skills just gets returned as such, no need to unpack; TODO unify data */}
+          {/* Skills after tools
           <SelectionFilter
             title="Filter By Skills"
             items={skills}
             selectedItems={selectedSkillsFilters}
             onChange={handleSkillsFilterChange}
           />
-
+          */}
 
           <SelectionFilter
             title="Filter By Tools"
             items={tools}
-            selectedItems={selectedToolsFilters}
-            onChange={handleToolsFilterChange}  // works even though category style
+            selectedItems={selectedToolFilters}
+            onChange={handleToolFilterChange}  // works even though category style
           />
 
         </div>
