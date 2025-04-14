@@ -47,7 +47,7 @@ const App = () => {
   const [selectedCategoryFilters, setSelectedCategoryFilters] = useState<Category[]>([]);
   const handleCategoryFilterChange = createFilterHandler<Category>(setSelectedCategoryFilters);
 
-  const skills = useSkills();
+  const { data: skills } = useSkills();
   const [selectedSkillFilters, setselectedSkillFilters] = useState<Skill[]>([]);
   const handleSkillsFilterChange = createFilterHandler<Skill>(setselectedSkillFilters);
 
@@ -75,7 +75,7 @@ const App = () => {
     selectedToolFilters,
     selectedSkillFilters
   ).data || [];
-  console.log(filteredProjects.length)
+  //console.log(filteredProjects.length)
 
   const sortedCategories = sortItems(filteredCategories, sortOption);
   let sortedProjects = [] as Project[];

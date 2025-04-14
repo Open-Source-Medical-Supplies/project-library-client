@@ -14,6 +14,12 @@ export function useSkills(): UseQueryResult<Skill[]> {
     }).then(parseResponse),
   });
 
+    console.log('vvv')
+    console.log(SKILLS_URL)
+    console.log(query)
+    console.log(query?.data)
+    console.log('^^^')
+
   return {
     ...query,
     data: query?.data || [],

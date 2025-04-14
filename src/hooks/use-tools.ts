@@ -14,6 +14,11 @@ export function useTools(): UseQueryResult<Tool[]> {
     }).then(parseResponse),
   });
 
+
+    console.log('vvv')
+    console.log(query?.data)
+    console.log('^^^')
+
   return {
     ...query,
     data: query?.data || [],
