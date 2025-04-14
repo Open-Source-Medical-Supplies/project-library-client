@@ -47,6 +47,11 @@ const App = () => {
   const [selectedCategoryFilters, setSelectedCategoryFilters] = useState<Category[]>([]);
   const handleCategoryFilterChange = createFilterHandler<Category>(setSelectedCategoryFilters);
 
+  /*
+   * These are going to collapse into one.
+     And it should ideally be a list of name-[items] pairs.
+     That'll need to come from a hook.
+   */
   const { data: skills } = useSkills();
   const [selectedSkillFilters, setselectedSkillFilters] = useState<Skill[]>([]);
   const handleSkillsFilterChange = createFilterHandler<Skill>(setselectedSkillFilters);
@@ -131,6 +136,10 @@ const App = () => {
 
           {/* This ideally moves to being a map of three types to one filter
               all passed the same data, given its small size (can be api call when larger, np) */}
+          {/*
+
+
+          */}
           <SelectionFilter
             title="Filter By Category"
             items={categories}
