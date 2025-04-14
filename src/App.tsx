@@ -46,15 +46,11 @@ const App = () => {
   const { data: categories } = useCategories();
   const [selectedCategoryFilters, setSelectedCategoryFilters] = useState<Category[]>([]);
   const handleCategoryFilterChange = createFilterHandler<Category>(setSelectedCategoryFilters);
-/*
-  const { data: projects } = useProjects();
-  const [selectedProjectsFilters, setSelectedProjectsFilters] = useState<Category[]>([]);
-  const handleProjectsFilterChange = createFilterHandler<Category>(setSelectedProjectsFilters);
 
   const skills = useSkills();
-  const [selectedSkillsFilters, setSelectedSkillsFilters] = useState<Skill[]>([]);
-  const handleSkillsFilterChange = createFilterHandler<Skill>(setSelectedSkillsFilters);
-*/
+  const [selectedSkillFilters, setselectedSkillFilters] = useState<Skill[]>([]);
+  const handleSkillsFilterChange = createFilterHandler<Skill>(setselectedSkillFilters);
+
   const { data: tools } = useTools();
   const [selectedToolFilters, setSelectedToolFilters] = useState<Tool[]>([]);
   const handleToolFilterChange = createFilterHandler<Category>(setSelectedToolFilters);
@@ -76,20 +72,22 @@ const App = () => {
   const filteredProjects = useFilteredProjects(
     searchQuery,
     selectedCategoryFilters,
-    selectedToolFilters
+    selectedToolFilters,
+    selectedSkillFilters
   ).data || [];
   console.log(filteredProjects.length)
 
   const sortedCategories = sortItems(filteredCategories, sortOption);
   let sortedProjects = [] as Project[];
-  if (searchQuery !== '' || 
-    selectedCategoryFilters.length > 0 || 
+  if (searchQuery !== '' ||
+    selectedCategoryFilters.length > 0 ||
+    selectedSkillFilters.length > 0 ||
     selectedToolFilters.length > 0) {
     sortedProjects = sortItems(filteredProjects, sortOption);
   }
 
 
-  // Used in category card rendering only, to snap filterint to exactly one. 
+  // Used in category card rendering only, to snap filterint to exactly one.
   const filterProjectsByCategory = (categoryToken: string) => {
     const category = categories?.find((cat) => cat.token === categoryToken);
     if (!category) return;
@@ -140,14 +138,12 @@ const App = () => {
             onChange={handleCategoryFilterChange}
           />
 
-          {/* Skills after tools
           <SelectionFilter
             title="Filter By Skills"
             items={skills}
-            selectedItems={selectedSkillsFilters}
+            selectedItems={selectedSkillFilters}
             onChange={handleSkillsFilterChange}
           />
-          */}
 
           <SelectionFilter
             title="Filter By Tools"

@@ -28,6 +28,8 @@ export function useFilteredProjects(
   selectedToolFilters?: Tool[]
 ): UseQueryResult<Project[]> {
   console.log('useProjects. ', selectedToolFilters)
+  const toolTokens = selectedToolFilters?.map((u) => u.token).join(',') 
+  console.log('ToolTokens: ', toolTokens)
   const query = useQuery({
     queryKey: [
       'filteredProjects',
@@ -47,7 +49,7 @@ export function useFilteredProjects(
           ?.map((category) => category.token).join(','),
 
         // This must match the edge function "Projects"
-        toolTokens: selectedToolFilters?.map((u) => u.token).join(',')
+        toolTokens: toolTokens,// selectedToolFilters?.map((u) => u.token).join(',')
       }),
     }).then(parseResponse),
   });
