@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Search } from 'lucide-react';
+import { Key, Search } from 'lucide-react';
 import CategoryCard from './components/CategoryCard';
 import ProjectCard from './components/ProjectCard';
 import { Category, FilterType, Project, Skill, Tool, Filter } from './types';
@@ -12,6 +12,7 @@ import { useProjects, useFilteredProjects } from './hooks/use-projects';
 import { useCategories, useFilteredCategories } from './hooks/use-categories';
 import SelectionFilter from './components/SelectionFilter';
 import styles from './App.module.css';
+import { group } from 'console';
 
 const App = () => {
   const [localSearch, setLocalSearch] = useState('');
@@ -86,6 +87,7 @@ const App = () => {
   console.log(groupedFilters);
   console.log(groupedFilters);
   console.log(groupedFilters);
+  console.log(Object.entries(groupedFilters))
 
   // --- Filters' State --- //
 
@@ -167,26 +169,18 @@ const App = () => {
               It'll take:
                 * filters, selectedFilters, handleFilterSelectionChange
           */}
-          <SelectionFilter
-            title="Filter By Skills"
-            items={skills}
-            selectedItems={selectedSkillFilters}
-            onChange={handleSkillsFilterChange}
-          />
 
-          <SelectionFilter
-            title="Filter By Tools"
-            items={tools}
-            selectedItems={selectedToolFilters}
-            onChange={handleToolFilterChange}  // works even though category style
-          />
 
-          <SelectionFilter
-            title="Filter By Filters"
-            items={filters}
-            selectedItems={selectedFilters}
-            onChange={handleFilterChange}  // works even though category style
-          />
+          {
+            Object.entries(groupedFilters).map(([key, items]) => (
+              <SelectionFilter
+              title="Filter By Filters"
+              items={items}
+              selectedItems={selectedFilters}
+              onChange={handleFilterChange}  // works even though category style
+            />
+            ))
+          }
 
         </div>
         {/* End of Sidebar */}
