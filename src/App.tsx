@@ -174,11 +174,11 @@ const App = () => {
           {
             Object.entries(groupedFilters).map(([key, items]) => (
               <SelectionFilter
-              title="Filter By Filters"
-              items={items}
-              selectedItems={selectedFilters}
-              onChange={handleFilterChange}  // works even though category style
-            />
+                title={`Filter by ${key.charAt(0) + key.slice(1).toLowerCase()}`}
+                items={items}
+                selectedItems={selectedFilters}
+                onChange={handleFilterChange}  // works even though category style
+              />
             ))
           }
 
