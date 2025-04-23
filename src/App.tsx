@@ -84,8 +84,7 @@ const App = () => {
   const filteredProjects = useFilteredProjects(
     searchQuery,
     selectedCategoryFilters,
-    selectedToolFilters,  // TODO: these to be replaced by selectedFilters
-    selectedSkillFilters
+    selectedFilters
   ).data || [];
 
   const sortedCategories = sortItems(filteredCategories, sortOption);

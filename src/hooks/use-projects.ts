@@ -3,6 +3,7 @@ import { HEADERS, parseResponse } from './core';
 import { Category, Project, Tool } from '../types';
 import { PROJECTS_URL } from '../constants/url';
 
+import { Filter } from '../types';
 
 export function useProjects(): UseQueryResult<Project[]> {
   console.log('useProjects')
@@ -25,17 +26,17 @@ export function useProjects(): UseQueryResult<Project[]> {
 export function useFilteredProjects(
   searchQuery: string,
   selectedCategoryFilters?: Category[],
-  selectedToolFilters?: Tool[]
+  selectedFilters?: Filter[]
 ): UseQueryResult<Project[]> {
-  console.log('useProjects. ', selectedToolFilters)
-  const toolTokens = selectedToolFilters?.map((u) => u.token).join(',') 
-  console.log('ToolTokens: ', toolTokens)
+  console.log('useProjects. ', selectedFilters)
+  const filterTokens = selectedFilters?.map((u) => u.token).join(',')   // TODO: matches? 
+  console.log('filterTokens: ', filterTokens)
   const query = useQuery({
     queryKey: [
       'filteredProjects',
       searchQuery,
       selectedCategoryFilters,
-      selectedToolFilters
+      selectedFilters
     ],
     queryFn: () => fetch(PROJECTS_URL, {
       method: 'POST',
@@ -49,7 +50,7 @@ export function useFilteredProjects(
           ?.map((category) => category.token).join(','),
 
         // This must match the edge function "Projects"
-        toolTokens: toolTokens,// selectedToolFilters?.map((u) => u.token).join(',')
+        filterTokens: filterTokens,// selectedToolFilters?.map((u) => u.token).join(',')
       }),
     }).then(parseResponse),
   });
