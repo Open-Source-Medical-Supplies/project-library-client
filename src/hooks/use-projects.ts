@@ -2,7 +2,6 @@ import { useQuery, UseQueryResult } from '@tanstack/react-query';
 import { HEADERS, parseResponse } from './core';
 import { Category, Project } from '../types';
 import { PROJECTS_URL } from '../constants/url';
-
 import { Filter } from '../types';
 
 export function useProjects(): UseQueryResult<Project[]> {
