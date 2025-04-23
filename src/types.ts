@@ -39,6 +39,13 @@ export interface Skill {
   token?: string;
 }
 
+export interface Filter {
+  name: string;
+  slug: string;
+  token: string;
+  type: string;
+}
+
 export interface Tool {
   name: string;
   slug: string;

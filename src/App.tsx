@@ -2,11 +2,12 @@ import { useState, useEffect } from 'react';
 import { Search } from 'lucide-react';
 import CategoryCard from './components/CategoryCard';
 import ProjectCard from './components/ProjectCard';
-import { Category, FilterType, Project, Skill, Tool } from './types';
+import { Category, FilterType, Project, Skill, Tool, Filter } from './types';
 import { sortItems } from './utilities';
 
 import { useTools } from './hooks/use-tools';
 import { useSkills } from './hooks/use-skills';
+import { useFilters } from './hooks/use-filters'
 import { useProjects, useFilteredProjects } from './hooks/use-projects';
 import { useCategories, useFilteredCategories } from './hooks/use-categories';
 import SelectionFilter from './components/SelectionFilter';
@@ -42,7 +43,7 @@ const App = () => {
   // II: Use
   //const handleCategoryFilterChange = createFilterHandler<Category>(setSelectedCategoryFilters);  
 
-
+  /* This Stays. Categories are special. */
   const { data: categories } = useCategories();
   const [selectedCategoryFilters, setSelectedCategoryFilters] = useState<Category[]>([]);
   const handleCategoryFilterChange = createFilterHandler<Category>(setSelectedCategoryFilters);
@@ -61,6 +62,11 @@ const App = () => {
   const handleToolFilterChange = createFilterHandler<Category>(setSelectedToolFilters);
 
 
+  const { data: filters } = useFilters();
+  const [selectedFilters, setSelectedFilters] = useState<Filter[]>([]);
+  const handleFilterChange = createFilterHandler<Filter>(setSelectedFilters);
+
+
   // -- Needs some stuff from filters -- //
 
 
@@ -74,13 +80,13 @@ const App = () => {
     isLoading: isLoadingCategories,
   } = useFilteredCategories(searchQuery, selectedCategoryFilters);
 
+
   const filteredProjects = useFilteredProjects(
     searchQuery,
     selectedCategoryFilters,
-    selectedToolFilters,
+    selectedToolFilters,  // TODO: these to be replaced by selectedFilters
     selectedSkillFilters
   ).data || [];
-  //console.log(filteredProjects.length)
 
   const sortedCategories = sortItems(filteredCategories, sortOption);
   let sortedProjects = [] as Project[];
@@ -134,12 +140,7 @@ const App = () => {
         {/* Sidebar Region */}
         <div className={styles.filterSidebar}>
 
-          {/* This ideally moves to being a map of three types to one filter
-              all passed the same data, given its small size (can be api call when larger, np) */}
-          {/*
-
-
-          */}
+          {/* This Stays. Categories are special. */}
           <SelectionFilter
             title="Filter By Category"
             items={categories}
@@ -147,6 +148,10 @@ const App = () => {
             onChange={handleCategoryFilterChange}
           />
 
+          {/* These collapse into one FilterPane
+              It'll take:
+                * filters, selectedFilters, handleFilterSelectionChange
+          */}
           <SelectionFilter
             title="Filter By Skills"
             items={skills}
