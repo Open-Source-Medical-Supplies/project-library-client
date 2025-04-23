@@ -69,7 +69,23 @@ const App = () => {
 
   // -- Needs some stuff from filters -- //
 
-
+  const groupedFilters = filters.reduce((acc, item) => {
+    if (!acc[item.type]) {
+      acc[item.type] = [];
+    }
+    acc[item.type].push(item);
+    return acc;
+  }, {});
+  
+  console.log(groupedFilters);
+  console.log(groupedFilters);
+  console.log(groupedFilters);
+  console.log(groupedFilters);
+  console.log(groupedFilters);
+  console.log(groupedFilters);
+  console.log(groupedFilters);
+  console.log(groupedFilters);
+  console.log(groupedFilters);
 
   // --- Filters' State --- //
 
@@ -163,6 +179,13 @@ const App = () => {
             items={tools}
             selectedItems={selectedToolFilters}
             onChange={handleToolFilterChange}  // works even though category style
+          />
+
+          <SelectionFilter
+            title="Filter By Filters"
+            items={filters}
+            selectedItems={selectedFilters}
+            onChange={handleFilterChange}  // works even though category style
           />
 
         </div>

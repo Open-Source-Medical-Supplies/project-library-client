@@ -22,6 +22,8 @@ export function useFilters(): UseQueryResult<Filter[]> {
     console.log(query?.data)
     console.log('^^^')
 
+      
+
   return {
     ...query,
     data: query?.data || [],
