@@ -16,14 +16,6 @@ export function useFilters(): UseQueryResult<Filter[]> {
     }).then(parseResponse),
   });
 
-    console.log('vvv')
-    console.log(URL)
-    console.log(query)
-    console.log(query?.data)
-    console.log('^^^')
-
-      
-
   return {
     ...query,
     data: query?.data || [],

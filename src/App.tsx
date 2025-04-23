@@ -1,18 +1,15 @@
 import { useState, useEffect } from 'react';
-import { Key, Search } from 'lucide-react';
+import { Search } from 'lucide-react';
 import CategoryCard from './components/CategoryCard';
 import ProjectCard from './components/ProjectCard';
-import { Category, FilterType, Project, Skill, Tool, Filter } from './types';
+import { Category, Project, Filter } from './types';
 import { sortItems } from './utilities';
 
-import { useTools } from './hooks/use-tools';
-import { useSkills } from './hooks/use-skills';
 import { useFilters } from './hooks/use-filters'
-import { useProjects, useFilteredProjects } from './hooks/use-projects';
+import { useFilteredProjects } from './hooks/use-projects';
 import { useCategories, useFilteredCategories } from './hooks/use-categories';
 import SelectionFilter from './components/SelectionFilter';
 import styles from './App.module.css';
-import { group } from 'console';
 
 const App = () => {
   const [localSearch, setLocalSearch] = useState('');
@@ -28,12 +25,6 @@ const App = () => {
     };
   }, [localSearch]);
 
-
-  // -- Accessing source of truth -- //
-
-  // 6/7: handleCategoryFilterChange
-  // part I/II: Make
-  // All this does, is either add an item, or drop an item.
   const createFilterHandler = <T extends { token: string }>(
     setter: React.Dispatch<React.SetStateAction<T[]>>
   ) => (item: T, checked: boolean) => {
@@ -41,34 +32,17 @@ const App = () => {
       checked ? [...prev, item] : prev.filter((i) => i.token !== item.token)
     );
   };
-  // II: Use
-  //const handleCategoryFilterChange = createFilterHandler<Category>(setSelectedCategoryFilters);  
 
   /* This Stays. Categories are special. */
   const { data: categories } = useCategories();
   const [selectedCategoryFilters, setSelectedCategoryFilters] = useState<Category[]>([]);
   const handleCategoryFilterChange = createFilterHandler<Category>(setSelectedCategoryFilters);
 
-  /*
-   * These are going to collapse into one.
-     And it should ideally be a list of name-[items] pairs.
-     That'll need to come from a hook.
-   */
-  const { data: skills } = useSkills();
-  const [selectedSkillFilters, setselectedSkillFilters] = useState<Skill[]>([]);
-  const handleSkillsFilterChange = createFilterHandler<Skill>(setselectedSkillFilters);
-
-  const { data: tools } = useTools();
-  const [selectedToolFilters, setSelectedToolFilters] = useState<Tool[]>([]);
-  const handleToolFilterChange = createFilterHandler<Category>(setSelectedToolFilters);
-
 
   const { data: filters } = useFilters();
   const [selectedFilters, setSelectedFilters] = useState<Filter[]>([]);
   const handleFilterChange = createFilterHandler<Filter>(setSelectedFilters);
 
-
-  // -- Needs some stuff from filters -- //
 
   const groupedFilters = filters.reduce((acc, item) => {
     if (!acc[item.type]) {
@@ -77,21 +51,7 @@ const App = () => {
     acc[item.type].push(item);
     return acc;
   }, {});
-  
-  console.log(groupedFilters);
-  console.log(groupedFilters);
-  console.log(groupedFilters);
-  console.log(groupedFilters);
-  console.log(groupedFilters);
-  console.log(groupedFilters);
-  console.log(groupedFilters);
-  console.log(groupedFilters);
-  console.log(groupedFilters);
-  console.log(Object.entries(groupedFilters))
 
-  // --- Filters' State --- //
-
-  // 3/7 Selected Category Filters + co
 
   const {
     data: filteredCategories = [],
@@ -109,11 +69,9 @@ const App = () => {
   let sortedProjects = [] as Project[];
   if (searchQuery !== '' ||
     selectedCategoryFilters.length > 0 ||
-    selectedSkillFilters.length > 0 ||
-    selectedToolFilters.length > 0) {
+    selectedFilters.length > 0) {
     sortedProjects = sortItems(filteredProjects, sortOption);
   }
-
 
   // Used in category card rendering only, to snap filterint to exactly one.
   const filterProjectsByCategory = (categoryToken: string) => {
@@ -122,9 +80,6 @@ const App = () => {
     setSelectedCategoryFilters([category]);
     setSearchQuery('');
   };
-
-
-  // -- End Section on Filters' State -- //
 
   return (
     <div className={styles.appContainer}>
@@ -165,19 +120,13 @@ const App = () => {
             onChange={handleCategoryFilterChange}
           />
 
-          {/* These collapse into one FilterPane
-              It'll take:
-                * filters, selectedFilters, handleFilterSelectionChange
-          */}
-
-
-          {
+          {/* All Other Filter Panels */
             Object.entries(groupedFilters).map(([key, items]) => (
               <SelectionFilter
                 title={`Filter by ${key.charAt(0) + key.slice(1).toLowerCase()}`}
                 items={items}
                 selectedItems={selectedFilters}
-                onChange={handleFilterChange}  // works even though category style
+                onChange={handleFilterChange}  
               />
             ))
           }

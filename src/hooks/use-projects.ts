@@ -1,6 +1,6 @@
 import { useQuery, UseQueryResult } from '@tanstack/react-query';
 import { HEADERS, parseResponse } from './core';
-import { Category, Project, Tool } from '../types';
+import { Category, Project } from '../types';
 import { PROJECTS_URL } from '../constants/url';
 
 import { Filter } from '../types';
@@ -28,9 +28,9 @@ export function useFilteredProjects(
   selectedCategoryFilters?: Category[],
   selectedFilters?: Filter[]
 ): UseQueryResult<Project[]> {
-  console.log('useProjects. ', selectedFilters)
-  const filterTokens = selectedFilters?.map((u) => u.token).join(',')   // TODO: matches? 
-  console.log('filterTokens: ', filterTokens)
+  
+  const filterTokens = selectedFilters?.map((u) => u.token).join(',')  
+
   const query = useQuery({
     queryKey: [
       'filteredProjects',
@@ -38,6 +38,7 @@ export function useFilteredProjects(
       selectedCategoryFilters,
       selectedFilters
     ],
+
     queryFn: () => fetch(PROJECTS_URL, {
       method: 'POST',
       mode: 'cors',
