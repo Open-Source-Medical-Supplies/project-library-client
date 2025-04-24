@@ -18,10 +18,8 @@ export interface CategoryData {
   token: string;
 }
 
-
 export interface Project {
   slug: string;
-  // categoryIds: string[];
   description?: string;
   name: string;
   primaryImage?: string;
@@ -39,10 +37,17 @@ export interface Skill {
   token?: string;
 }
 
+export interface Filter {
+  name: string;
+  slug: string;
+  token: string;
+  type: string;
+}
+
 export interface Tool {
   name: string;
   slug: string;
-  token?: string;
+  token: string;
 }
 
 export type FilterType = CategoryData | Skill | Tool;
@@ -56,4 +61,6 @@ export interface FilterSectionProps {
   title: string;
 }
 
-
+export interface GroupedFilters {
+  [key: string]: Filter[];
+}
