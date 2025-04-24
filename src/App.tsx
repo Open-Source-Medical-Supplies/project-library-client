@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Search } from 'lucide-react';
 import CategoryCard from './components/CategoryCard';
 import ProjectCard from './components/ProjectCard';
-import { Category, Project, Filter } from './types';
+import { Category, Project, Filter, FilterType, GroupedFilters } from './types';
 import { sortItems } from './utilities';
 
 import { useFilters } from './hooks/use-filters'
@@ -34,17 +34,15 @@ const App = () => {
   };
 
   /* This Stays. Categories are special. */
-  const { data: categories } = useCategories();
+  const { data: categories = [] } = useCategories();
   const [selectedCategoryFilters, setSelectedCategoryFilters] = useState<Category[]>([]);
   const handleCategoryFilterChange = createFilterHandler<Category>(setSelectedCategoryFilters);
 
-
-  const { data: filters } = useFilters();
+  const { data: filters = [] } = useFilters();
   const [selectedFilters, setSelectedFilters] = useState<Filter[]>([]);
   const handleFilterChange = createFilterHandler<Filter>(setSelectedFilters);
 
-
-  const groupedFilters = filters.reduce((acc, item) => {
+  const groupedFilters = filters.reduce<GroupedFilters>((acc, item) => {
     if (!acc[item.type]) {
       acc[item.type] = [];
     }
@@ -52,12 +50,10 @@ const App = () => {
     return acc;
   }, {});
 
-
   const {
     data: filteredCategories = [],
     isLoading: isLoadingCategories,
   } = useFilteredCategories(searchQuery, selectedCategoryFilters);
-
 
   const filteredProjects = useFilteredProjects(
     searchQuery,
@@ -88,7 +84,6 @@ const App = () => {
       <div className={styles.searchSection}>
         <div className={styles.searchBar}>
           <div className={styles.inputWrapper}>
-
             <input
               type="text"
               placeholder="What are you looking for?"
@@ -96,48 +91,42 @@ const App = () => {
               value={localSearch}
               onChange={(e) => setLocalSearch(e.target.value)}
             />
-
             <button className={styles.searchIcon}>
               <Search size={20} />
             </button>
-
           </div>
         </div>
       </div>
-
 
       {/* Everything Else: Sidebar and Main Region */}
       <div className={styles.mainContent}>
 
         {/* Sidebar Region */}
         <div className={styles.filterSidebar}>
-
           {/* This Stays. Categories are special. */}
           <SelectionFilter
             title="Filter By Category"
-            items={categories}
-            selectedItems={selectedCategoryFilters}
-            onChange={handleCategoryFilterChange}
+            items={categories as unknown as FilterType[]}
+            selectedItems={selectedCategoryFilters as unknown as FilterType[]}
+            onChange={(item, checked) => handleCategoryFilterChange(item as Category, checked)}
           />
 
           {/* All Other Filter Panels */
             Object.entries(groupedFilters).map(([key, items]) => (
               <SelectionFilter
+                key={key}
                 title={`Filter by ${key.charAt(0) + key.slice(1).toLowerCase()}`}
-                items={items}
-                selectedItems={selectedFilters}
-                onChange={handleFilterChange}  
+                items={items as FilterType[]}
+                selectedItems={selectedFilters as FilterType[]}
+                onChange={(item, checked) => handleFilterChange(item as Filter, checked)}
               />
             ))
           }
-
         </div>
         {/* End of Sidebar */}
 
-
         {/* Non-Sidebar Main Region contains Categories and Projects*/}
         <div className={styles.contentArea}>
-
           <h2 className={styles.sectionTitle}>All Categories</h2>
 
           {/* Categories Region */}
@@ -159,7 +148,6 @@ const App = () => {
             )}
           </div>
 
-
           {/* Projects Region */}
           {sortedProjects.length > 0 && (
             <div className={styles.projectsSection}>
@@ -171,10 +159,8 @@ const App = () => {
               </div>
             </div>
           )}
-
         </div>
         {/* End of Main Region */}
-
       </div>
     </div>
   );
