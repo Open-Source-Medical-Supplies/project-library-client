@@ -44,13 +44,12 @@ export function useFilteredProjects(
       headers: HEADERS,
       body: JSON.stringify({
         search: searchQuery,
-
         // This is where the items are rendered into a string of comma separated values
         categoryTokens: selectedCategoryFilters
           ?.map((category) => category.token).join(','),
-
         // This must match the edge function "Projects"
-        filterTokens: filterTokens,// selectedToolFilters?.map((u) => u.token).join(',')
+        // selectedToolFilters?.map((u) => u.token).join(',')
+        filterTokens: filterTokens,
       }),
     }).then(parseResponse),
   });

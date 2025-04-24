@@ -23,10 +23,7 @@ export function useCategories(): UseQueryResult<CategoryData[]> {
 export function useFilteredCategories(
   searchQuery: string,
   selectedCategoryFilters: Category[],
-  // selectedSkillFilters: Skill[],
-  // selectedToolFilters: Tool[],
 ) : UseQueryResult<CategoryData[]> {
-  //console.log('useFilteredCategories', selectedCategoryFilters);
   const query = useQuery({
     queryKey: [
       'filteredCategories',
