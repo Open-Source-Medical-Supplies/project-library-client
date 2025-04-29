@@ -25,7 +25,7 @@ const SelectionFilter: React.FC<SelectionFilterProps> = ({
 
   // Sort and filter items based on search term
   const filteredItems = useMemo(() => {
-    let sorted = [...items].sort((a, b) => {
+    const sorted = [...items].sort((a, b) => {
       // Primary sort: first by selectedItems
       if (selectedItems.includes(a) && !selectedItems.includes(b)) {
         return -1;
