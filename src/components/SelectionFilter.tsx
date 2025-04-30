@@ -1,9 +1,9 @@
 // SelectionFilter.tsx
 import React from 'react';
-import { ChevronDown, ChevronUp } from 'lucide-react';
+import { ChevronDown, ChevronUp, Search } from 'lucide-react';
 import { FilterType } from '../types';
 import styles from './SelectionFilter.module.css';
-import { useState,} from 'react';
+import { useState, useMemo } from 'react';
 
 interface SelectionFilterProps {
     title: string;
@@ -14,29 +14,40 @@ interface SelectionFilterProps {
 
 const SelectionFilter: React.FC<SelectionFilterProps> = ({
   title, 
-  items,  // TODO actually just a note: items to come in a table: filter, type (eg skills), checked, 
+  items,
   selectedItems,
   onChange,
 }) => {
     
   const [isOpen, setIsOpen] = useState<boolean>(true);
   const [showAll, setShowAll] = useState<boolean>(false);
+  const [searchTerm, setSearchTerm] = useState<string>('');
 
-  items.sort((a, b) => {
-    // Primary sort: first by selectedItems
-    if (selectedItems.includes(a) && !selectedItems.includes(b)) {
-      return -1;
+  // Sort and filter items based on search term
+  const filteredItems = useMemo(() => {
+    const sorted = [...items].sort((a, b) => {
+      // Primary sort: first by selectedItems
+      if (selectedItems.includes(a) && !selectedItems.includes(b)) {
+        return -1;
+      }
+      if (selectedItems.includes(b) && !selectedItems.includes(a)) {
+        return 1;
+      }
+      // Secondary sort: if neither is selected, sort alphabetically
+      return a.name.localeCompare(b.name);
+    });
+
+    if (searchTerm.trim()) {
+      return sorted.filter(item =>
+        item.name.toLowerCase().includes(searchTerm.toLowerCase())
+      );
     }
-    if (selectedItems.includes(b) && !selectedItems.includes(a)) {
-      return 1;
-    }
-    // Secondary sort: if neither is selected, sort alphabetically
-    return a.name.localeCompare(b.name);
-  });
+
+    return sorted;
+  }, [items, selectedItems, searchTerm]);
 
   return (
     <div className={styles.selectionFilter}>
-
       {/* Open+Close Filter Switchboard */}
       <button onClick={() => setIsOpen(!isOpen)} className={styles.toggleButton}>
         <span className={styles.title}>{title}</span>
@@ -45,25 +56,36 @@ const SelectionFilter: React.FC<SelectionFilterProps> = ({
 
       {isOpen && (
         <div className={styles.itemsContainer}>
+          {/* Search Input */}
+          {items.length > 10 && (
+            <div className={styles.searchContainer}>
+              <Search size={16} className={styles.searchIcon} />
+              <input
+                type="text"
+                placeholder="Search..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className={styles.searchInput}
+              />
+            </div>
+          )}
 
           {/* Render Filter Checkable Items */}
-          {items.slice(0, showAll ? items.length : 10).map((item) => (
+          {filteredItems.slice(0, showAll ? filteredItems.length : 5).map((item) => (
             <label key={item.token} className={styles.itemLabel}>
               <input
                 type="checkbox"
                 className={styles.checkbox}
-
                 checked={selectedItems.includes(item as FilterType)}
                 onChange={(e) => onChange(item, e.target.checked)}
               />
-
               <span className={styles.itemName}>{item.name}</span>
             </label>
           ))} 
 
           {/* Show All? Yes or no. */}
-          {isOpen && <div className={styles.footerContainer}>
-            {
+          {filteredItems.length > 5 && !searchTerm && (
+            <div className={styles.footerContainer}>
               <button
                 className={styles.footerButton}
                 onClick={(e) => {
@@ -71,15 +93,13 @@ const SelectionFilter: React.FC<SelectionFilterProps> = ({
                   setShowAll(!showAll);
                 }}
               >
-                {showAll ? 'View Fewer' : 'View More'}
+                {showAll ? 'View Less' : 'View More'}
               </button>
-            }
             </div>
-          }
+          )}
         </div>
       )}
     </div>
-
   );
 };
 
