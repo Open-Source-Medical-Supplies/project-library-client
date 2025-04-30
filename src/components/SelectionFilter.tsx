@@ -57,16 +57,18 @@ const SelectionFilter: React.FC<SelectionFilterProps> = ({
       {isOpen && (
         <div className={styles.itemsContainer}>
           {/* Search Input */}
-          <div className={styles.searchContainer}>
-            <Search size={16} className={styles.searchIcon} />
-            <input
-              type="text"
-              placeholder="Search..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className={styles.searchInput}
-            />
-          </div>
+          {items.length > 10 && (
+            <div className={styles.searchContainer}>
+              <Search size={16} className={styles.searchIcon} />
+              <input
+                type="text"
+                placeholder="Search..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className={styles.searchInput}
+              />
+            </div>
+          )}
 
           {/* Render Filter Checkable Items */}
           {filteredItems.slice(0, showAll ? filteredItems.length : 5).map((item) => (
@@ -91,7 +93,7 @@ const SelectionFilter: React.FC<SelectionFilterProps> = ({
                   setShowAll(!showAll);
                 }}
               >
-                {showAll ? 'View Fewer' : 'View More'}
+                {showAll ? 'View Less' : 'View More'}
               </button>
             </div>
           )}
