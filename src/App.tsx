@@ -1,4 +1,4 @@
-import { useState, useEffect, use } from 'react';
+import { useState, useEffect } from 'react';
 import { Search } from 'lucide-react';
 import CategoryCard from './components/CategoryCard';
 import ProjectCard from './components/ProjectCard';
