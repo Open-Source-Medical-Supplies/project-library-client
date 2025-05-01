@@ -55,11 +55,14 @@ const App = () => {
     isLoading: isLoadingCategories,
   } = useFilteredCategories(searchQuery, selectedCategoryFilters);
 
-  const filteredProjects = useFilteredProjects(
+  const {
+    data: filteredProjects = [],
+    isLoading: isLoadingProjects,
+  } = useFilteredProjects(
     searchQuery,
     selectedCategoryFilters,
     selectedFilters
-  ).data || [];
+  );
 
   const sortedCategories = sortItems(filteredCategories, sortOption);
   let sortedProjects = [] as Project[];
@@ -83,12 +86,12 @@ const App = () => {
     } else {
       setShowCategories(false);
     }
-  }
-  , [selectedCategoryFilters, selectedFilters]);
+  }, [selectedCategoryFilters, selectedFilters]);
+
+  const isLoading = isLoadingProjects || isLoadingCategories;
 
   return (
     <div className={styles.appContainer}>
-
       {/* Search Box */}
       <div className={styles.searchSection}>
         <div className={styles.searchBar}>
@@ -107,12 +110,10 @@ const App = () => {
         </div>
       </div>
 
-      {/* Everything Else: Sidebar and Main Region */}
+      {/* Sidebar and Main Region */}
       <div className={styles.mainContent}>
-
         {/* Sidebar Region */}
         <div className={styles.filterSidebar}>
-          {/* This Stays. Categories are special. */}
           <SelectionFilter
             title="Filter By Category"
             items={categories as unknown as FilterType[]}
@@ -136,13 +137,13 @@ const App = () => {
         </div>
         {/* End of Sidebar */}
 
-        {/* Non-Sidebar Main Region contains Categories and Projects*/}
+        {/* Main Region contains Categories and Projects*/}
         <div className={styles.contentArea}>
+          {isLoading ? <div>Loading...</div> : null }
+
           {/* Categories Region */}
           <div className={styles.categoriesSection}>
-            {isLoadingCategories ? (
-              <div>Loading...</div>
-            ) : (showCategories && sortedCategories.length > 0) ? (
+            {(!isLoading && showCategories && sortedCategories.length > 0) ? (
               <>
                 {/* <h2 className={styles.sectionTitle}>Categories</h2> */}
                 <div className={styles.categoryGrid}>
@@ -162,18 +163,22 @@ const App = () => {
           </div>
 
           {/* Projects Region */}
-          {(sortedProjects.length > 0 ? (
-            <div className={styles.projectsSection}>
-              <h2 className={styles.sectionTitle}>Projects</h2>
-              <div className={styles.projectsGrid}>
-                {sortedProjects.map((project) => (
-                  <ProjectCard key={project.slug} {...project} />
-                ))}
-              </div>
+          {!isLoading ? (
+            <div>
+              {(sortedProjects.length > 0 ? (
+                <div className={styles.projectsSection}>
+                  <h2 className={styles.sectionTitle}>Projects</h2>
+                  <div className={styles.projectsGrid}>
+                    {sortedProjects.map((project) => (
+                      <ProjectCard key={project.slug} {...project} />
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                <p className={styles.noResultsText}>No projects found.</p>
+              ))}
             </div>
-          ) : (
-            <p className={styles.noResultsText}>No projects found.</p>
-          ))}
+          ) : null }
         </div>
         {/* End of Main Region */}
       </div>
