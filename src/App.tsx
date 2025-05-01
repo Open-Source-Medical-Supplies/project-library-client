@@ -84,7 +84,7 @@ const App = () => {
       setShowCategories(false);
     }
   }
-  , [sortedCategories, selectedFilters]);
+  , [selectedCategoryFilters, selectedFilters]);
 
   return (
     <div className={styles.appContainer}>
