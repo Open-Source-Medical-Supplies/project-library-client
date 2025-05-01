@@ -156,7 +156,8 @@ const App = () => {
                 </div>
               </>
             ) : (
-              <p className={styles.noResultsText}>No categories selected.</p>
+              // <p className={styles.noResultsText}>No categories selected.</p>
+              null
             )}
           </div>
 
@@ -171,7 +172,7 @@ const App = () => {
               </div>
             </div>
           ) : (
-            null
+            <p className={styles.noResultsText}>No projects found.</p>
           ))}
         </div>
         {/* End of Main Region */}
