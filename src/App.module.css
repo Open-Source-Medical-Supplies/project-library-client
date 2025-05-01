@@ -101,7 +101,7 @@
 
 /* Categories section */
 .categoriesSection {
-  margin-bottom: 2rem;
+  /* margin-bottom: 2rem; */
 }
 
 .sectionTitle {
@@ -118,6 +118,7 @@
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 4px 0px;
+  margin-bottom: 2rem;
 }
 
 .noResultsText {
@@ -126,7 +127,7 @@
 
 /* Projects section */
 .projectsSection {
-  margin-top: 2rem;
+  /* margin-top: 2rem; */
 }
 
 /* Grid for projects with fixed card widths */

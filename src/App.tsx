@@ -41,7 +41,7 @@ const App = () => {
   const { data: filters = [] } = useFilters();
   const [selectedFilters, setSelectedFilters] = useState<Filter[]>([]);
   const handleFilterChange = createFilterHandler<Filter>(setSelectedFilters);
-
+  const [showCategories, setShowCategories] = useState(true);
   const groupedFilters = filters.reduce<GroupedFilters>((acc, item) => {
     if (!acc[item.type]) {
       acc[item.type] = [];
@@ -76,6 +76,15 @@ const App = () => {
     setSelectedCategoryFilters([category]);
     setSearchQuery('');
   };
+
+  useEffect(() => {
+    if (selectedCategoryFilters.length > 0 || selectedFilters.length == 0) {
+      setShowCategories(true);
+    } else {
+      setShowCategories(false);
+    }
+  }
+  , [selectedCategoryFilters, selectedFilters]);
 
   return (
     <div className={styles.appContainer}>
@@ -118,7 +127,9 @@ const App = () => {
                 title={`Filter by ${key.charAt(0) + key.slice(1).toLowerCase()}`}
                 items={items as FilterType[]}
                 selectedItems={selectedFilters as FilterType[]}
-                onChange={(item, checked) => handleFilterChange(item as Filter, checked)}
+                onChange={(item, checked) => {
+                  handleFilterChange(item as Filter, checked)
+                }}
               />
             ))
           }
@@ -127,29 +138,31 @@ const App = () => {
 
         {/* Non-Sidebar Main Region contains Categories and Projects*/}
         <div className={styles.contentArea}>
-          <h2 className={styles.sectionTitle}>All Categories</h2>
-
           {/* Categories Region */}
           <div className={styles.categoriesSection}>
             {isLoadingCategories ? (
               <div>Loading...</div>
-            ) : sortedCategories.length > 0 ? (
-              <div className={styles.categoryGrid}>
-                {sortedCategories.map((category) => (
-                  <CategoryCard
-                    key={category.token}
-                    {...category}
-                    filterProjectsByCategory={filterProjectsByCategory}
-                  />
-                ))}
-              </div>
+            ) : (showCategories && sortedCategories.length > 0) ? (
+              <>
+                {/* <h2 className={styles.sectionTitle}>Categories</h2> */}
+                <div className={styles.categoryGrid}>
+                  {sortedCategories.map((category) => (
+                    <CategoryCard
+                      key={category.token}
+                      {...category}
+                      filterProjectsByCategory={filterProjectsByCategory}
+                    />
+                  ))}
+                </div>
+              </>
             ) : (
-              <p className={styles.noResultsText}>No categories found.</p>
+              // <p className={styles.noResultsText}>No categories selected.</p>
+              null
             )}
           </div>
 
           {/* Projects Region */}
-          {sortedProjects.length > 0 && (
+          {(sortedProjects.length > 0 ? (
             <div className={styles.projectsSection}>
               <h2 className={styles.sectionTitle}>Projects</h2>
               <div className={styles.projectsGrid}>
@@ -158,7 +171,9 @@ const App = () => {
                 ))}
               </div>
             </div>
-          )}
+          ) : (
+            <p className={styles.noResultsText}>No projects found.</p>
+          ))}
         </div>
         {/* End of Main Region */}
       </div>
