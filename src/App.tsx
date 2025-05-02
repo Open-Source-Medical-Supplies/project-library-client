@@ -10,6 +10,7 @@ import { useFilteredProjects } from './hooks/use-projects';
 import { useCategories, useFilteredCategories } from './hooks/use-categories';
 import SelectionFilter from './components/SelectionFilter';
 import styles from './App.module.css';
+import Spinner from './components/Spinner';
 
 const App = () => {
   const [localSearch, setLocalSearch] = useState('');
@@ -88,7 +89,9 @@ const App = () => {
     }
   }, [selectedCategoryFilters, selectedFilters]);
 
-  const isLoading = isLoadingProjects || isLoadingCategories;
+  // const isLoading = isLoadingProjects || isLoadingCategories;
+
+  const isLoading = true;
 
   return (
     <div className={styles.appContainer}>
@@ -116,6 +119,7 @@ const App = () => {
         <div className={styles.filterSidebar}>
           <SelectionFilter
             title="Filter By Category"
+            searchable={true}
             items={categories as unknown as FilterType[]}
             selectedItems={selectedCategoryFilters as unknown as FilterType[]}
             onChange={(item, checked) => handleCategoryFilterChange(item as Category, checked)}
@@ -139,7 +143,11 @@ const App = () => {
 
         {/* Main Region contains Categories and Projects*/}
         <div className={styles.contentArea}>
-          {isLoading ? <div>Loading...</div> : null }
+          {isLoading ? (
+            <div className={styles.spinnerContainer}>
+              <Spinner size={100} color="#e74c3c" />
+            </div>
+          ) : null }
 
           {/* Categories Region */}
           <div className={styles.categoriesSection}>

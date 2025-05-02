@@ -10,11 +10,13 @@ interface SelectionFilterProps {
     items: FilterType[];
     selectedItems: FilterType[];
     onChange: (item: FilterType, checked: boolean) => void;
+    searchable?: boolean;
 }
 
 const SelectionFilter: React.FC<SelectionFilterProps> = ({
-  title, 
+  title,
   items,
+  searchable = false,
   selectedItems,
   onChange,
 }) => {
@@ -57,7 +59,7 @@ const SelectionFilter: React.FC<SelectionFilterProps> = ({
       {isOpen && (
         <div className={styles.itemsContainer}>
           {/* Search Input */}
-          {items.length > 10 && (
+          {(searchable || items.length > 10) && (
             <div className={styles.searchContainer}>
               <Search size={16} className={styles.searchIcon} />
               <input
