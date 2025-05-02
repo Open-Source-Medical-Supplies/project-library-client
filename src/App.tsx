@@ -89,13 +89,10 @@ const App = () => {
     }
   }, [selectedCategoryFilters, selectedFilters]);
 
-  // const isLoading = isLoadingProjects || isLoadingCategories;
-
-  const isLoading = true;
+  const isLoading = isLoadingProjects || isLoadingCategories;
 
   return (
     <div className={styles.appContainer}>
-      {/* Search Box */}
       <div className={styles.searchSection}>
         <div className={styles.searchBar}>
           <div className={styles.inputWrapper}>
@@ -113,9 +110,7 @@ const App = () => {
         </div>
       </div>
 
-      {/* Sidebar and Main Region */}
       <div className={styles.mainContent}>
-        {/* Sidebar Region */}
         <div className={styles.filterSidebar}>
           <SelectionFilter
             title="Filter By Category"
@@ -125,23 +120,19 @@ const App = () => {
             onChange={(item, checked) => handleCategoryFilterChange(item as Category, checked)}
           />
 
-          {/* All Other Filter Panels */
-            Object.entries(groupedFilters).map(([key, items]) => (
-              <SelectionFilter
-                key={key}
-                title={`Filter by ${key.charAt(0) + key.slice(1).toLowerCase()}`}
-                items={items as FilterType[]}
-                selectedItems={selectedFilters as FilterType[]}
-                onChange={(item, checked) => {
-                  handleFilterChange(item as Filter, checked)
-                }}
-              />
-            ))
-          }
+          {Object.entries(groupedFilters).map(([key, items]) => (
+            <SelectionFilter
+              key={key}
+              title={`Filter by ${key.charAt(0) + key.slice(1).toLowerCase()}`}
+              items={items as FilterType[]}
+              selectedItems={selectedFilters as FilterType[]}
+              onChange={(item, checked) => {
+                handleFilterChange(item as Filter, checked)
+              }}
+            />
+          ))}
         </div>
-        {/* End of Sidebar */}
 
-        {/* Main Region contains Categories and Projects*/}
         <div className={styles.contentArea}>
           {isLoading ? (
             <div className={styles.spinnerContainer}>
@@ -149,28 +140,20 @@ const App = () => {
             </div>
           ) : null }
 
-          {/* Categories Region */}
           <div className={styles.categoriesSection}>
             {(!isLoading && showCategories && sortedCategories.length > 0) ? (
-              <>
-                {/* <h2 className={styles.sectionTitle}>Categories</h2> */}
-                <div className={styles.categoryGrid}>
-                  {sortedCategories.map((category) => (
-                    <CategoryCard
-                      key={category.token}
-                      {...category}
-                      filterProjectsByCategory={filterProjectsByCategory}
-                    />
-                  ))}
-                </div>
-              </>
-            ) : (
-              // <p className={styles.noResultsText}>No categories selected.</p>
-              null
-            )}
+              <div className={styles.categoryGrid}>
+                {sortedCategories.map((category) => (
+                  <CategoryCard
+                    key={category.token}
+                    {...category}
+                    filterProjectsByCategory={filterProjectsByCategory}
+                  />
+                ))}
+              </div>
+            ) : null }
           </div>
 
-          {/* Projects Region */}
           {!isLoading ? (
             <div>
               {(sortedProjects.length > 0 ? (
@@ -188,7 +171,6 @@ const App = () => {
             </div>
           ) : null }
         </div>
-        {/* End of Main Region */}
       </div>
     </div>
   );
