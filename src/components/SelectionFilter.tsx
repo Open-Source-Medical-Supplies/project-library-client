@@ -48,8 +48,12 @@ const SelectionFilter: React.FC<SelectionFilterProps> = ({
     return sorted;
   }, [items, selectedItems, searchTerm]);
 
+  const containerClass = isOpen ?
+    styles.selectionFilter :
+    styles.selectionFilterClosed;
+
   return (
-    <div className={styles.selectionFilter}>
+    <div className={containerClass}>
       {/* Open+Close Filter Switchboard */}
       <button onClick={() => setIsOpen(!isOpen)} className={styles.toggleButton}>
         <span className={styles.title}>{title}</span>

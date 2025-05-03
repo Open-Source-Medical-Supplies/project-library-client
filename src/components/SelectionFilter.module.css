@@ -1,3 +1,12 @@
+.selectionFilterClosed {
+  border: 1px solid #D1D5DB; /* border-gray-300 */
+  border-radius: 0.5rem; /* rounded-lg */
+  background-color: #F9FAFB; /* bg, -gray-50 */
+  display: none;
+  margin-bottom: 0.5rem;
+  min-height: none; /* min-h-10 */
+}
+
 .selectionFilter {
   border: 1px solid #D1D5DB; /* border-gray-300 */
   border-radius: 0.5rem; /* rounded-lg */
@@ -10,6 +19,9 @@
 /* Show filter section only on medium screens and up */
 @media (min-width: 768px) {
   .selectionFilter {
+    display: block;
+  }
+  .selectionFilterClosed {
     display: block;
   }
 }
