@@ -4,6 +4,7 @@
   background-color: #F9FAFB; /* bg, -gray-50 */
   display: none;
   margin-bottom: 0.5rem;
+  min-height: 10em; /* min-h-10 */
 }
 
 /* Show filter section only on medium screens and up */

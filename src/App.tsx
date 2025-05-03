@@ -10,6 +10,7 @@ import { useFilteredProjects } from './hooks/use-projects';
 import { useCategories, useFilteredCategories } from './hooks/use-categories';
 import SelectionFilter from './components/SelectionFilter';
 import styles from './App.module.css';
+import Spinner from './components/Spinner';
 
 const App = () => {
   const [localSearch, setLocalSearch] = useState('');
@@ -55,11 +56,14 @@ const App = () => {
     isLoading: isLoadingCategories,
   } = useFilteredCategories(searchQuery, selectedCategoryFilters);
 
-  const filteredProjects = useFilteredProjects(
+  const {
+    data: filteredProjects = [],
+    isLoading: isLoadingProjects,
+  } = useFilteredProjects(
     searchQuery,
     selectedCategoryFilters,
     selectedFilters
-  ).data || [];
+  );
 
   const sortedCategories = sortItems(filteredCategories, sortOption);
   let sortedProjects = [] as Project[];
@@ -83,13 +87,12 @@ const App = () => {
     } else {
       setShowCategories(false);
     }
-  }
-  , [selectedCategoryFilters, selectedFilters]);
+  }, [selectedCategoryFilters, selectedFilters]);
+
+  const isLoading = isLoadingProjects || isLoadingCategories;
 
   return (
     <div className={styles.appContainer}>
-
-      {/* Search Box */}
       <div className={styles.searchSection}>
         <div className={styles.searchBar}>
           <div className={styles.inputWrapper}>
@@ -107,75 +110,67 @@ const App = () => {
         </div>
       </div>
 
-      {/* Everything Else: Sidebar and Main Region */}
       <div className={styles.mainContent}>
-
-        {/* Sidebar Region */}
         <div className={styles.filterSidebar}>
-          {/* This Stays. Categories are special. */}
           <SelectionFilter
             title="Filter By Category"
+            searchable={true}
             items={categories as unknown as FilterType[]}
             selectedItems={selectedCategoryFilters as unknown as FilterType[]}
             onChange={(item, checked) => handleCategoryFilterChange(item as Category, checked)}
           />
 
-          {/* All Other Filter Panels */
-            Object.entries(groupedFilters).map(([key, items]) => (
-              <SelectionFilter
-                key={key}
-                title={`Filter by ${key.charAt(0) + key.slice(1).toLowerCase()}`}
-                items={items as FilterType[]}
-                selectedItems={selectedFilters as FilterType[]}
-                onChange={(item, checked) => {
-                  handleFilterChange(item as Filter, checked)
-                }}
-              />
-            ))
-          }
-        </div>
-        {/* End of Sidebar */}
-
-        {/* Non-Sidebar Main Region contains Categories and Projects*/}
-        <div className={styles.contentArea}>
-          {/* Categories Region */}
-          <div className={styles.categoriesSection}>
-            {isLoadingCategories ? (
-              <div>Loading...</div>
-            ) : (showCategories && sortedCategories.length > 0) ? (
-              <>
-                {/* <h2 className={styles.sectionTitle}>Categories</h2> */}
-                <div className={styles.categoryGrid}>
-                  {sortedCategories.map((category) => (
-                    <CategoryCard
-                      key={category.token}
-                      {...category}
-                      filterProjectsByCategory={filterProjectsByCategory}
-                    />
-                  ))}
-                </div>
-              </>
-            ) : (
-              // <p className={styles.noResultsText}>No categories selected.</p>
-              null
-            )}
-          </div>
-
-          {/* Projects Region */}
-          {(sortedProjects.length > 0 ? (
-            <div className={styles.projectsSection}>
-              <h2 className={styles.sectionTitle}>Projects</h2>
-              <div className={styles.projectsGrid}>
-                {sortedProjects.map((project) => (
-                  <ProjectCard key={project.slug} {...project} />
-                ))}
-              </div>
-            </div>
-          ) : (
-            <p className={styles.noResultsText}>No projects found.</p>
+          {Object.entries(groupedFilters).map(([key, items]) => (
+            <SelectionFilter
+              key={key}
+              title={`Filter by ${key.charAt(0) + key.slice(1).toLowerCase()}`}
+              items={items as FilterType[]}
+              selectedItems={selectedFilters as FilterType[]}
+              onChange={(item, checked) => {
+                handleFilterChange(item as Filter, checked)
+              }}
+            />
           ))}
         </div>
-        {/* End of Main Region */}
+
+        <div className={styles.contentArea}>
+          {isLoading ? (
+            <div className={styles.spinnerContainer}>
+              <Spinner size={100} color="#e74c3c" />
+            </div>
+          ) : null }
+
+          <div className={styles.categoriesSection}>
+            {(!isLoading && showCategories && sortedCategories.length > 0) ? (
+              <div className={styles.categoryGrid}>
+                {sortedCategories.map((category) => (
+                  <CategoryCard
+                    key={category.token}
+                    {...category}
+                    filterProjectsByCategory={filterProjectsByCategory}
+                  />
+                ))}
+              </div>
+            ) : null }
+          </div>
+
+          {!isLoading ? (
+            <div>
+              {(sortedProjects.length > 0 ? (
+                <div className={styles.projectsSection}>
+                  <h2 className={styles.sectionTitle}>Projects</h2>
+                  <div className={styles.projectsGrid}>
+                    {sortedProjects.map((project) => (
+                      <ProjectCard key={project.slug} {...project} />
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                <p className={styles.noResultsText}>No projects found.</p>
+              ))}
+            </div>
+          ) : null }
+        </div>
       </div>
     </div>
   );
