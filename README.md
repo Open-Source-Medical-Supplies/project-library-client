@@ -59,7 +59,19 @@ The application depends on Node.js and npm. You will need to install these first
    ```bash
    npm install
    ```
-2. **Set environment variables**
+
+2. **Run Mock Service Worker**
+
+The client can be run with a mock service worker to simulate the API calls. This allows you to develop without the Supabase API credentials.
+
+   ```bash
+   npm run dev:msw
+   ```
+
+See the [Mock Service Worker](https://mswjs.io/docs/) documentation for more details on how to set up and use the mock service worker. The mocks are implemented in the `src/mocks` directory. The mock service worker intercepts network requests and returns the appropriate mock data.
+
+
+3. **Set environment variables**
 
 The application depends a few environment variables to run. You can create a `.env` file in the root of the project with the following variables:
 
@@ -75,11 +87,12 @@ SUPABASE_SERVICE_KEY=""
 If you are testing against the production DB and API you will need to be invited to the Supabase project to get the API keys.
 If you are running the Supabase app locally, you can use the `supabase status` command to get the local credentials.
 
-3. **Start Development Server**:
+4. **Start Development Server**:
    ```bash
    npm run dev
    ```
    This will launch the Vite development server, typically at `http://localhost:5173`. Hot-module reloading (HMR) minimzes refresh time during development.
+
 4. **Lint & Format**:
    ```bash
    npm run lint
