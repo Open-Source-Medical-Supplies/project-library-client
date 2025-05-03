@@ -129,7 +129,11 @@
 }
 
 .noResultsText {
+  text-align: center;
+  padding: 1em;
   color: #4B5563;
+  font-size: 20px;
+  font-weight: 500;
 }
 
 /* Projects section */
@@ -164,4 +168,24 @@
   .projectsGrid {
     grid-template-columns: 1fr;
   }
+}
+
+.noResultsContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 75vh;
+  background: white;
+  text-align: center;
+}
+
+.noResultsImage {
+  width: 100%;
+  max-width: 300px;
+}
+
+.clearFiltersButton {
+  padding: 1em;
+  text-decoration: underline;
+  color: #35619B;
 }

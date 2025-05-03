@@ -11,6 +11,7 @@ import { useCategories, useFilteredCategories } from './hooks/use-categories';
 import SelectionFilter from './components/SelectionFilter';
 import styles from './App.module.css';
 import Spinner from './components/Spinner';
+import emptyImage from './assets/logo.png';
 
 const App = () => {
   const [localSearch, setLocalSearch] = useState('');
@@ -166,7 +167,23 @@ const App = () => {
                   </div>
                 </div>
               ) : (
-                <p className={styles.noResultsText}>No projects found.</p>
+                <div className={styles.noResultsContainer}>
+                  <div>
+                    <img src={emptyImage} alt="No results" className={styles.noResultsImage} />
+                    <p className={styles.noResultsText}>No Results Found.</p>
+                    <p>Try adjusting your search or filter.</p>
+                    <button
+                      className={styles.clearFiltersButton}
+                      onClick={() => {
+                        setSelectedCategoryFilters([]);
+                        setSelectedFilters([]);
+                        setSearchQuery('');
+                      }}
+                    >
+                     Clear Filters
+                    </button>
+                  </div>
+                </div>
               ))}
             </div>
           ) : null }
