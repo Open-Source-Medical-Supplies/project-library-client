@@ -69,3 +69,12 @@
   background-color: #eff6ff; /* Tailwind bg-blue-50 */
 }
 
+/*
+  Make the grids single-column on smaller screens.
+  Adjust the breakpoint below as desired.
+*/
+@media (max-width: 1024px) {
+  .mainContent {
+    display: block;
+  }
+}
