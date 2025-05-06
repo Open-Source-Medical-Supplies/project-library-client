@@ -124,7 +124,7 @@
 .categoryGrid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 4px 0px;
+  gap: 8px 8px;
   margin-bottom: 2rem;
 }
 

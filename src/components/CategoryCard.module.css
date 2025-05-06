@@ -4,7 +4,7 @@
   border-radius: 12px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   transition: box-shadow 0.3s ease;
-  width: 300px;
+  width: 100%;
 }
 
 .categoryContainer:hover {
@@ -67,14 +67,4 @@
 
 .buttonSecondary:hover {
   background-color: #eff6ff; /* Tailwind bg-blue-50 */
-}
-
-/*
-  Make the grids single-column on smaller screens.
-  Adjust the breakpoint below as desired.
-*/
-@media (max-width: 1024px) {
-  .mainContent {
-    display: block;
-  }
 }

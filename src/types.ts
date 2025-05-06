@@ -2,6 +2,7 @@ export interface Category {
   name: string;
   slug: string;
   token: string;
+  primaryImage?: string;
 }
 
 export interface CategoryData {

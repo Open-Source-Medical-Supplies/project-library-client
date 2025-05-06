@@ -2,7 +2,13 @@ import { useState, useEffect } from 'react';
 import { Search } from 'lucide-react';
 import CategoryCard from './components/CategoryCard';
 import ProjectCard from './components/ProjectCard';
-import { Category, Project, Filter, FilterType, GroupedFilters } from './types';
+import {
+  CategoryData,
+  Filter,
+  FilterType,
+  GroupedFilters,
+  Project,
+} from './types';
 import { sortItems } from './utilities';
 
 import { useFilters } from './hooks/use-filters'
@@ -11,39 +17,17 @@ import { useCategories, useFilteredCategories } from './hooks/use-categories';
 import SelectionFilter from './components/SelectionFilter';
 import styles from './App.module.css';
 import Spinner from './components/Spinner';
-import emptyImage from './assets/logo.png';
 
 const App = () => {
   const [localSearch, setLocalSearch] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
   const [sortOption] = useState('Most Recent');
-
-  useEffect(() => {
-    const handler = setTimeout(() => {
-      setSearchQuery(localSearch);
-    }, 300);
-    return () => {
-      clearTimeout(handler);
-    };
-  }, [localSearch]);
-
-  const createFilterHandler = <T extends { token: string }>(
-    setter: React.Dispatch<React.SetStateAction<T[]>>
-  ) => (item: T, checked: boolean) => {
-    setter((prev) =>
-      checked ? [...prev, item] : prev.filter((i) => i.token !== item.token)
-    );
-  };
-
-  /* This Stays. Categories are special. */
   const { data: categories = [] } = useCategories();
-  const [selectedCategoryFilters, setSelectedCategoryFilters] = useState<Category[]>([]);
-  const handleCategoryFilterChange = createFilterHandler<Category>(setSelectedCategoryFilters);
-
+  const [selectedCategoryFilters, setSelectedCategoryFilters] = useState<CategoryData[]>([]);
   const { data: filters = [] } = useFilters();
   const [selectedFilters, setSelectedFilters] = useState<Filter[]>([]);
-  const handleFilterChange = createFilterHandler<Filter>(setSelectedFilters);
   const [showCategories, setShowCategories] = useState(true);
+
   const groupedFilters = filters.reduce<GroupedFilters>((acc, item) => {
     if (!acc[item.type]) {
       acc[item.type] = [];
@@ -66,12 +50,32 @@ const App = () => {
     selectedFilters
   );
 
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setSearchQuery(localSearch);
+    }, 300);
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [localSearch]);
+
+  const createFilterHandler = <T extends { token: string }>(
+    setter: React.Dispatch<React.SetStateAction<T[]>>
+  ) => (item: T, checked: boolean) => {
+    setter((prev) =>
+      checked ? [...prev, item] : prev.filter((i) => i.token !== item.token)
+    );
+  };
+  const handleCategoryFilterChange = createFilterHandler<CategoryData>(setSelectedCategoryFilters);
+  const handleFilterChange = createFilterHandler<Filter>(setSelectedFilters);
+
   const sortedCategories = sortItems(filteredCategories, sortOption);
   let sortedProjects = [] as Project[];
+
   if (searchQuery !== '' ||
     selectedCategoryFilters.length > 0 ||
     selectedFilters.length > 0) {
-    sortedProjects = sortItems(filteredProjects, sortOption);
+    sortedProjects = sortItems(filteredProjects, sortOption) as Project[];
   }
 
   // Used in category card rendering only, to snap filterint to exactly one.
@@ -118,7 +122,7 @@ const App = () => {
             searchable={true}
             items={categories as unknown as FilterType[]}
             selectedItems={selectedCategoryFilters as unknown as FilterType[]}
-            onChange={(item, checked) => handleCategoryFilterChange(item as Category, checked)}
+            onChange={(item, checked) => handleCategoryFilterChange(item as CategoryData, checked)}
           />
 
           {Object.entries(groupedFilters).map(([key, items]) => (
@@ -147,7 +151,10 @@ const App = () => {
                 {sortedCategories.map((category) => (
                   <CategoryCard
                     key={category.token}
-                    {...category}
+                    name={category.name}
+                    primaryImage={category.primaryImage}
+                    slug={category.slug}
+                    token={category.token}
                     filterProjectsByCategory={filterProjectsByCategory}
                   />
                 ))}
@@ -169,7 +176,10 @@ const App = () => {
               ) : (
                 <div className={styles.noResultsContainer}>
                   <div>
-                    <img src={emptyImage} alt="No results" className={styles.noResultsImage} />
+                    <img
+                      src="https://dubgmsmipofgnhmmpfxc.supabase.co/storage/v1/object/public/osms//logo.png"
+                      alt="No results" className={styles.noResultsImage}
+                    />
                     <p className={styles.noResultsText}>No Results Found.</p>
                     <p>Try adjusting your search or filter.</p>
                     <button
