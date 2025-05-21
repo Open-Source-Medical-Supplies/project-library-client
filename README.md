@@ -8,11 +8,12 @@ This repository provides a **React + TypeScript** application that manages and d
 
 1. [Overview](#overview)
 2. [Features](#features)
-3. [Project Structure](#project-structure)
-4. [Local Development](#local-development)
-5. [Deployment](#deployment)
-6. [Embedding in Webflow](#embedding-in-webflow)
-7. [Additional Notes](#additional-notes)
+2. [Bug Reporting](#bug-reporting)
+4. [Project Structure](#project-structure)
+5. [Local Development](#local-development)
+6. [Deployment](#deployment)
+7. [Embedding in Webflow](#embedding-in-webflow)
+8. [Additional Notes](#additional-notes)
 
 ---
 
@@ -37,6 +38,15 @@ This project applies modular design through custom hooks, modular components, an
 - **Build Output** optimized via Vite for production deployment.
 - **Supabase Storage** used for hosting the final build output.
 - **Webflow Embedding** for integrating this app with a Webflow site.
+
+---
+
+## Bug Reporting
+
+Bug Report Standard Operating Procedure:
+1. Project Library Client GitHub page --> Projects tab
+1. For each new bug reported, create an issue in this project under the bugs tab (look for the 🐛 emoji)
+2. As needed for task segmentation clarity, create bug-specific sub issues, as opposed to new top-level issues if work on a single bug needs to be carved off into separate dev branches.
 
 ---
 
