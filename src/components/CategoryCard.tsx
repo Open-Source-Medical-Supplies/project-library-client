@@ -1,7 +1,10 @@
 import styles from './CategoryCard.module.css';
-import { CategoryData } from "../types";
 
-interface CategoryCardProps extends CategoryData {
+interface CategoryCardProps {
+  token: string;
+  name: string;
+  primaryImage?: string;
+  slug: string;
   filterProjectsByCategory: (slug: string) => void;
 }
 
